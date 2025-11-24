@@ -94,6 +94,7 @@
 		E9AA36972ED49C7C00CEF4ED /* fitness_assistant */ = {
 			isa = PBXGroup;
 			children = (
+				E9E84B412ED4AB05001F9BBA /* Models */,
 				E9AA36982ED49C7C00CEF4ED /* fitness_assistantApp.swift */,
 				E9AA369A2ED49C7C00CEF4ED /* ContentView.swift */,
 				E9AA369C2ED49C7D00CEF4ED /* Assets.xcassets */,
@@ -125,6 +126,13 @@
 				E9AA36B52ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift */,
 			);
 			path = fitness_assistantUITests;
+			sourceTree = "<group>";
+		};
+		E9E84B412ED4AB05001F9BBA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
