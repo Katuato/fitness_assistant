@@ -14,6 +14,7 @@
 		E9AA36AA2ED49C7D00CEF4ED /* fitness_assistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36A92ED49C7D00CEF4ED /* fitness_assistantTests.swift */; };
 		E9AA36B42ED49C7D00CEF4ED /* fitness_assistantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B32ED49C7D00CEF4ED /* fitness_assistantUITests.swift */; };
 		E9AA36B62ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B52ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift */; };
+		E9E84B432ED4B03B001F9BBA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E84B422ED4B03B001F9BBA /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		E9AA36AF2ED49C7D00CEF4ED /* fitness_assistantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fitness_assistantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9AA36B32ED49C7D00CEF4ED /* fitness_assistantUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fitness_assistantUITests.swift; sourceTree = "<group>"; };
 		E9AA36B52ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fitness_assistantUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E9E84B422ED4B03B001F9BBA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 		E9E84B412ED4AB05001F9BBA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E9E84B422ED4B03B001F9BBA /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			files = (
 				E9AA369B2ED49C7C00CEF4ED /* ContentView.swift in Sources */,
 				E9AA36992ED49C7C00CEF4ED /* fitness_assistantApp.swift in Sources */,
+				E9E84B432ED4B03B001F9BBA /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
