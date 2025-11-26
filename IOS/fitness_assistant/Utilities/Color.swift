@@ -6,3 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+
+extension Color {
+    static let darkBackground = Color(red: 31, green: 31, blue: 31)
+}

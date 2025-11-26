@@ -7,11 +7,25 @@
 
 import SwiftUI
 
+
 @main
-struct fitness_assistantApp: App {
+struct FitnessAssistantApp: App {
+    @StateObject private var onboardingService = OnboardingService()
+    @StateObject private var appCoordinator = AppCoordinator()
+    
     var body: some Scene {
+        Color.darkBackground
+                .ignoresSafeArea()
         WindowGroup {
-            ContentView()
+            Group {
+                if onboardingService.hasCompletedOnboarding {
+                    //Main or log in/reg
+                } else {
+                    OnboardingView()
+                        .environmentObject(onboardingService)
+                }
+            }
+            .animation(.easeInOut, value: onboardingService.hasCompletedOnboarding)
         }
     }
 }
