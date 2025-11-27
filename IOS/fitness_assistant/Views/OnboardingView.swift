@@ -30,8 +30,7 @@ struct OnboardingView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .lineSpacing(6)
-                        .tailored(-0,26)
-                        .padding(.horizontal, 20)
+    
 
                 Image(pages[currentPage].pageImage)
                         .resizable()

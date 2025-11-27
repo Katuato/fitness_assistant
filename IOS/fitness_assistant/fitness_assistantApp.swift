@@ -11,21 +11,24 @@ import SwiftUI
 @main
 struct FitnessAssistantApp: App {
     @StateObject private var onboardingService = OnboardingService()
-    @StateObject private var appCoordinator = AppCoordinator()
-    
+    //@StateObject private var appCoordinator = AppCoordinator()
     var body: some Scene {
-        Color.darkBackground
-                .ignoresSafeArea()
         WindowGroup {
+            // MARK: - Временно отключен онбординг для тестирования
+            // MainTabView()
+            
+            // MARK: - Раскомментируйте код ниже, чтобы включить онбординг
+            
             Group {
                 if onboardingService.hasCompletedOnboarding {
-                    //Main or log in/reg
+                    MainTabView()
                 } else {
                     OnboardingView()
                         .environmentObject(onboardingService)
                 }
             }
             .animation(.easeInOut, value: onboardingService.hasCompletedOnboarding)
+            
         }
     }
 }
