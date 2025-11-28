@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @StateObject private var workoutService = WorkoutService()
+    @EnvironmentObject var onboardingService: OnboardingService
     @State private var selectedTab = 0
     
     init() {
@@ -70,6 +71,7 @@ struct MainTabView: View {
                     .tag(2)
                 
                 ProfileView()
+                    .environmentObject(onboardingService)
                     .background(Color.customBackground.ignoresSafeArea())
                     .tabItem {
                         Image(systemName: selectedTab == 3 ? "person.fill" : "person")
@@ -83,4 +85,5 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environmentObject(OnboardingService())
 }

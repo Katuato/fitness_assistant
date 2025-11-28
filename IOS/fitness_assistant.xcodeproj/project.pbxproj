@@ -22,6 +22,8 @@
 		7764C3802ED85038005C4C92 /* ExerciseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C37F2ED85038005C4C92 /* ExerciseCard.swift */; };
 		7764C3822ED8503F005C4C92 /* AddExerciseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3812ED8503F005C4C92 /* AddExerciseButton.swift */; };
 		7764C3842ED85045005C4C92 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3832ED85045005C4C92 /* HomeHeaderView.swift */; };
+		779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779422B12EDA193D00E3EDDF /* ProfileModel.swift */; };
+		779422B42EDA194B00E3EDDF /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */; };
 		77CA00ED2ED837DD007C7C6E /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */; };
 		77CA00EE2ED837DD007C7C6E /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA00D92ED837DD007C7C6E /* OnboardingService.swift */; };
 		77CA00EF2ED837DD007C7C6E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA00E72ED837DD007C7C6E /* OnboardingView.swift */; };
@@ -84,6 +86,8 @@
 		7764C37F2ED85038005C4C92 /* ExerciseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCard.swift; sourceTree = "<group>"; };
 		7764C3812ED8503F005C4C92 /* AddExerciseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseButton.swift; sourceTree = "<group>"; };
 		7764C3832ED85045005C4C92 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		779422B12EDA193D00E3EDDF /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		77CA00D42ED837DD007C7C6E /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		77CA00D62ED837DD007C7C6E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 				77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */,
 				77CA00D42ED837DD007C7C6E /* UserModel.swift */,
 				77CA01012ED83DB7007C7C6E /* WorkoutModel.swift */,
+				779422B12EDA193D00E3EDDF /* ProfileModel.swift */,
+				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -439,10 +445,12 @@
 				77CA00F02ED837DD007C7C6E /* Color.swift in Sources */,
 				77CA010C2ED83DB8007C7C6E /* ProfileView.swift in Sources */,
 				7764C3692ED848E0005C4C92 /* WeeklyStatsCard.swift in Sources */,
+				779422B42EDA194B00E3EDDF /* ProfileViewModel.swift in Sources */,
 				77CA00F12ED837DD007C7C6E /* fitness_assistantApp.swift in Sources */,
 				7764C3632ED848CB005C4C92 /* WeeklyStats.swift in Sources */,
 				7764C3712ED84BDD005C4C92 /* DashboardViewModel.swift in Sources */,
 				7764C3732ED84C1C005C4C92 /* DashboardHeaderView.swift in Sources */,
+				779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */,
 				7764C37E2ED8502E005C4C92 /* AITrackerCard.swift in Sources */,
 				77CA00F22ED837DD007C7C6E /* UserModel.swift in Sources */,
 				7764C3752ED84C25005C4C92 /* RecentSessionsSection.swift in Sources */,

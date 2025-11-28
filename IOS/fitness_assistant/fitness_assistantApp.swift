@@ -22,6 +22,7 @@ struct FitnessAssistantApp: App {
             Group {
                 if onboardingService.hasCompletedOnboarding {
                     MainTabView()
+                        .environmentObject(onboardingService)
                 } else {
                     OnboardingView()
                         .environmentObject(onboardingService)
