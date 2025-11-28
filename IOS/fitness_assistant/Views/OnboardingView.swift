@@ -18,55 +18,119 @@ struct OnboardingView: View {
     
     var body: some View {
         ZStack {
-            
             Image(pages[currentPage].backgroundImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
-            VStack {
-                VStack(spacing: 40) {
+            VStack{
+                VStack {
                     Text(pages[currentPage].title)
                         .font(.system(size: 32, weight: .bold))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
-                        .lineSpacing(6)
-    
-
-                Image(pages[currentPage].pageImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 300)
-                        .scaleEffect(isAnimating ? 1.05 : 1.0)
-                        .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: isAnimating)
-                }
-                
-                Spacer()
-
-                HStack(spacing: 8) {
-                    ForEach(0..<pages.count, id: \.self) { index in
-                        Group {
-                            if index == currentPage {
-                                RoundedRectangle(cornerRadius: 100)
-                                    .fill(Color.white)
-                                    .frame(width: 28, height: 13)
-                            } else {
-                                Circle()
-                                    .fill(Color.white)
-                                    .frame(width: 13, height: 13)
-                            }
-                        }
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentPage)
-                        .onTapGesture {
-                            withAnimation(.spring()) {
-                                currentPage = index
-                            }
-                        }
+                        .lineSpacing(0)
+                        .padding(.bottom,80)
+                    
+                    if pages[currentPage].pageImage != "" {
+                        Image(pages[currentPage].pageImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 280)
                     }
                 }
-                .padding(.bottom, 30)
-            }
-        }
+                .padding(.top, topPaddingForCurrentPage)
+                
+                Spacer()
+                
+                if !isFirstPage {
+                    HStack(spacing: 12) {
+                        ForEach(0..<pages.count, id: \.self) { index in
+                            Group {
+                                if index == currentPage {
+                                    RoundedRectangle(cornerRadius: 100)
+                                        .fill(Color.white)
+                                        .frame(width: 28, height: 13)
+                                } else {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 13, height: 13)
+                                }
+                            }
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentPage)
+                        }
+                    }
+                    .padding(.bottom, 10)
+                }
+                
+                if isLastPage {
+                    Button("START") {
+                        completeOnboarding()
+                    }
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 339, height: 81)
+                            .background(Color.white.opacity(0))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.white, lineWidth: 2)
+                            )
+                    .padding(.horizontal, 45)
+                    .padding(.bottom,70)
+                    
+                } else {
+                    Button("NEXT") {
+                        goToNextPage()
+                    }
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 339, height: 81)
+                    .background(Color.white.opacity(0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.white, lineWidth: 2)
+                    )
+                    .padding(.horizontal, 45)
+                    .padding(.bottom, !isFirstPage ? 10 : 70)
 
+                }
+                
+                if !isLastPage && !isFirstPage {
+                    Button("Skip") {
+                        skipOnboarding()
+                    }
+                    .font(.system(size: 24, weight: .bold))
+                    .background(Color.white.opacity(0))
+                    .foregroundColor(Color.white)
+                    .padding(.bottom,  37)
+                }
+               }
+               .frame(maxWidth: .infinity, maxHeight: .infinity)
+           }
+       }
+    private var topPaddingForCurrentPage: CGFloat {
+        if currentPage == 0 {
+            return 404
+        } else if currentPage == pages.count - 1 {
+            return 446
+        } else {
+            return 147
+        }
     }
+    
+
+     private func goToNextPage() {
+         guard currentPage < pages.count - 1 else { return }
+
+             currentPage += 1
+
+     }
+     
+    private func skipOnboarding() {
+        onboardingService.completeOnboarding()
+    }
+     
+     private func completeOnboarding() {
+         onboardingService.completeOnboarding()
+     }
 }
 

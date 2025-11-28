@@ -19,32 +19,32 @@ class OnboardingData {
     static let pages: [OnboardingPage] = [
         OnboardingPage(
             backgroundImage: "onboarding_bg_1",
-            title: "Hello\nI'm your\nAI-fitness assistant",
+            title: "Hello\nI'm your\nAI-fitnessassistant",
             pageImage: ""
         ),
         OnboardingPage(
             backgroundImage: "onboarding_bg_2",
-            title: "Here you can analyze your exercise form with AI\n\nAnd get personalized tips to improve it",
+            title: "Here you can analyze\nyour exercise form\nwith AI\n",
             pageImage: "onboarding_ai_assistant"
         ),
         OnboardingPage(
             backgroundImage: "onboarding_bg_3",
-            title: "And get personalized tips to improve it",
+            title: "And get\npersonalized tips\nto improve it",
             pageImage: "onboarding_ai_analysis"
         ),
         OnboardingPage(
             backgroundImage: "onboarding_bg_4",
-            title: "Also you can compete with friends and achieve your goals",
+            title: "Also you can compete\nwith friends and\nachieve your goals",
             pageImage: "onboarding_friends"
         ),
         OnboardingPage(
             backgroundImage: "onboarding_bg_5",
-            title: "And discover new workouts, perfectly tailored for you",
+            title: "And discover new\nworkouts, perfectly\ntailored for you",
             pageImage: "onboarding_workouts"
         ),
         OnboardingPage(
             backgroundImage: "onboarding_bg_6",
-            title: "LET'S GET STARTED",
+            title: "LET'S GET\nSTARTED",
             pageImage: ""
         )
     ]
