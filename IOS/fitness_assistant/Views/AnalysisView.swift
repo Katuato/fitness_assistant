@@ -27,62 +27,63 @@ struct AnalysisView: View {
             Color.customBackground
                 .ignoresSafeArea()
             
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 24) {
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Real-time form correction")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white.opacity(0.55))
                     
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Real-time form correction")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.white.opacity(0.55))
-                        
-                        Text("AI Posture Tracker")
-                            .font(.system(size: 30, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 16)
-                    
-                    AnalysisCameraCard(
-                        gradientRotation: viewModel.gradientRotation,
-                        brandPurple: brandPurple,
-                        brandOrange: brandOrange,
-                        isRecording: viewModel.isRecording,
-                        toggleRecording: viewModel.toggleRecording
-                    )
-                    
-                    HStack(spacing: 12) {
-                        MetricCard(title: "Reps", value: "\(viewModel.stats.reps)")
-                        MetricCard(title: "Sets", value: "\(viewModel.stats.sets)")
-                        MetricCard(title: "Time", value: viewModel.formattedTime)
-                    }
-                    
-                    HStack {
-                        Text("Suggested Exercises")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        Button(action: viewModel.viewAllExercises) {
-                            Text("View All")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(brandOrange)
-                        }
-                    }
-                    
-                    VStack(spacing: 10) {
-                        ForEach(viewModel.suggestedExercises.prefix(2)) { exercise in
-                            ExerciseRow(
-                                exercise: exercise,
-                                accentGreen: accentGreen,
-                                action: { viewModel.selectExercise(exercise) }
-                            )
-                        }
-                    }
-                    
-                    Spacer(minLength: 40)
+                    Text("AI Posture Tracker")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundColor(.white)
+                }
+                .padding(.top, 16)
+                .padding(.horizontal, 16)
+                
+                AnalysisCameraCard(
+                    gradientRotation: viewModel.gradientRotation,
+                    brandPurple: brandPurple,
+                    brandOrange: brandOrange,
+                    isRecording: viewModel.isRecording,
+                    toggleRecording: viewModel.toggleRecording
+                )
+                .padding(.horizontal, 16)
+                
+                HStack(spacing: 12) {
+                    MetricCard(title: "Reps", value: "\(viewModel.stats.reps)")
+                    MetricCard(title: "Sets", value: "\(viewModel.stats.sets)")
+                    MetricCard(title: "Time", value: viewModel.formattedTime)
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 24)
+                
+                HStack {
+                    Text("Suggested Exercises")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: viewModel.viewAllExercises) {
+                        Text("View All")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(brandOrange)
+                    }
+                }
+                .padding(.horizontal, 16)
+                
+                VStack(spacing: 10) {
+                    ForEach(viewModel.suggestedExercises.prefix(2)) { exercise in
+                        ExerciseRow(
+                            exercise: exercise,
+                            accentGreen: accentGreen,
+                            action: { viewModel.selectExercise(exercise) }
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+                
+                Spacer(minLength: 40)
             }
         }
     }
@@ -123,9 +124,7 @@ struct AnalysisCameraCard: View {
             }
             .rotationEffect(.degrees(gradientRotation))
             .blur(radius: 30)
-            .mask(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-            )
+            .mask(RoundedRectangle(cornerRadius: 24, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
                     .stroke(Color.white.opacity(0.15), lineWidth: 1)

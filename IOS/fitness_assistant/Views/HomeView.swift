@@ -10,81 +10,80 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     
-    init() {
-        UIScrollView.appearance().backgroundColor = .clear
-    }
-    
     var body: some View {
         ZStack {
+            // Фон
             Color.customBackground
                 .ignoresSafeArea()
             
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    HomeHeaderView()
-                        .padding(.horizontal)
-                    
-                    if let stats = viewModel.stats {
-                        HStack(spacing: 12) {
-                            StatCard(
-                                value: "\(stats.workoutsCount)",
-                                label: "Workouts"
-                            )
-                            
-                            StatCard(
-                                value: "\(stats.dayStreak)",
-                                label: "Day Streak"
-                            )
-                            
-                            StatCard(
-                                value: "\(stats.accuracy)%",
-                                label: "Accuracy"
-                            )
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    AITrackerCard()
-                        .padding(.horizontal)
-                    
-                    VStack(alignment: .leading, spacing: 16) {
-                        HStack {
-                            Text("Today's Plan")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            Button(action: viewModel.viewAllExercises) {
-                                Text("View All")
-                                    .foregroundColor(.orange)
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                        }
-                        .padding(.horizontal)
+            VStack(alignment: .leading, spacing: 24) {
+                
+                // Header
+                HomeHeaderView()
+                    .padding(.horizontal)
+                    .padding(.top, 16)
+                
+                // Stats
+                if let stats = viewModel.stats {
+                    HStack(spacing: 12) {
+                        StatCard(
+                            value: "\(stats.workoutsCount)",
+                            label: "Workouts"
+                        )
                         
-                        VStack(spacing: 12) {
-                            ForEach(viewModel.todaysPlan) { exercise in
-                                ExerciseCard(
-                                    exercise: exercise,
-                                    onPlayTapped: {
-                                        viewModel.startExercise(exercise)
-                                    }
-                                )
-                            }
-                            
-                            AddExerciseButton()
-                        }
-                        .padding(.horizontal)
+                        StatCard(
+                            value: "\(stats.dayStreak)",
+                            label: "Day Streak"
+                        )
+                        
+                        StatCard(
+                            value: "\(stats.accuracy)%",
+                            label: "Accuracy"
+                        )
                     }
-                    
-                    Spacer(minLength: 100)
+                    .padding(.horizontal)
                 }
-                .padding(.top, 16)
-                .background(Color.clear)
+                
+                // AI Tracker Card
+                AITrackerCard()
+                    .padding(.horizontal)
+                
+                // Today's Plan
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Text("Today's Plan")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Button(action: viewModel.viewAllExercises) {
+                            Text("View All")
+                                .foregroundColor(.orange)
+                                .font(.system(size: 16, weight: .medium))
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    VStack(spacing: 12) {
+                        ForEach(viewModel.todaysPlan) { exercise in
+                            ExerciseCard(
+                                exercise: exercise,
+                                onPlayTapped: {
+                                    viewModel.startExercise(exercise)
+                                }
+                            )
+                        }
+                        
+                        AddExerciseButton()
+                    }
+                    .padding(.horizontal)
+                }
+                
+                Spacer(minLength: 40)
             }
-            .background(Color.clear)
             
+            // Loading Overlay
             if viewModel.isLoading {
                 ProgressView()
                     .tint(.white)
@@ -100,4 +99,3 @@ struct HomeView: View {
     HomeView()
         .preferredColorScheme(.dark)
 }
-

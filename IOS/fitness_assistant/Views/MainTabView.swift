@@ -13,16 +13,14 @@ struct MainTabView: View {
     @State private var selectedTab = 0
     
     init() {
-        // Настройка TabBar один раз при инициализации
         let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1.0)
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        appearance.backgroundImage = UIImage()
+        appearance.shadowImage = UIImage()
+        appearance.shadowColor = .clear
+        appearance.backgroundEffect = nil
         
-        // Убираем разделительную линию
-        appearance.shadowColor = nil
-        appearance.shadowImage = nil
-        
-        // Настройка цветов иконок для всех состояний
         let itemAppearance = UITabBarItemAppearance()
         itemAppearance.normal.iconColor = UIColor.white.withAlphaComponent(0.5)
         itemAppearance.selected.iconColor = UIColor.systemOrange
@@ -31,55 +29,66 @@ struct MainTabView: View {
         appearance.inlineLayoutAppearance = itemAppearance
         appearance.compactInlineLayoutAppearance = itemAppearance
         
-        // Применяем ко всем состояниям TabBar
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        
-        // Для iOS 15+
+        let tabBar = UITabBar.appearance()
+        tabBar.standardAppearance = appearance
         if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = appearance
+            tabBar.scrollEdgeAppearance = appearance
         }
+        tabBar.isTranslucent = true
+        tabBar.backgroundColor = .clear
+        
+        UIScrollView.appearance().backgroundColor = .clear
+
+        UIView.appearance(whenContainedInInstancesOf: [UITabBar.self]).backgroundColor = .clear
     }
     
     var body: some View {
-        ZStack {
-            // Основной фон для всех экранов
-            Color.customBackground
-                .ignoresSafeArea()
-            
-            TabView(selection: $selectedTab) {
+        TabView(selection: $selectedTab) {
+            // TAB 0 — Home
+            ZStack {
+                Color.customBackground.ignoresSafeArea()
                 HomeView()
                     .environmentObject(workoutService)
-                    .background(Color.customBackground.ignoresSafeArea())
-                    .tabItem {
-                        Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
-                    }
-                    .tag(0)
-                
+            }
+            .tabItem {
+                Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
+            }
+            .tag(0)
+            
+            // TAB 1 — Analysis
+            ZStack {
+                Color.customBackground.ignoresSafeArea()
                 AnalysisView()
-                    .background(Color.customBackground.ignoresSafeArea())
-                    .tabItem {
-                        Image(systemName: selectedTab == 1 ? "video.fill" : "video")
-                    }
-                    .tag(1)
-                
+            }
+            .tabItem {
+                Image(systemName: selectedTab == 1 ? "video.fill" : "video")
+            }
+            .tag(1)
+            
+            // TAB 2 — Dashboard
+            ZStack {
+                Color.customBackground.ignoresSafeArea()
                 DashboardView()
-                    .background(Color.customBackground.ignoresSafeArea())
-                    .tabItem {
-                        Image(systemName: selectedTab == 2 ? "chart.xyaxis.line" : "chart.line.uptrend.xyaxis")
-                    }
-                    .tag(2)
-                
+            }
+            .tabItem {
+                Image(systemName: selectedTab == 2 ? "chart.xyaxis.line" : "chart.line.uptrend.xyaxis")
+            }
+            .tag(2)
+            
+            // TAB 3 — Profile
+            ZStack {
+                Color.customBackground.ignoresSafeArea()
                 ProfileView()
                     .environmentObject(onboardingService)
-                    .background(Color.customBackground.ignoresSafeArea())
-                    .tabItem {
-                        Image(systemName: selectedTab == 3 ? "person.fill" : "person")
-                    }
-                    .tag(3)
             }
-            .tint(.orange)
+            .tabItem {
+                Image(systemName: selectedTab == 3 ? "person.fill" : "person")
+            }
+            .tag(3)
         }
+        .tint(.orange)
+        .toolbarBackground(.hidden, for: .tabBar)
+        .background(Color.customBackground.ignoresSafeArea())
     }
 }
 
