@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		771591482EDA263B005F1B58 /* AnalysisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771591472EDA2634005F1B58 /* AnalysisModel.swift */; };
+		7715914A2EDA2662005F1B58 /* AnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771591492EDA2662005F1B58 /* AnalysisViewModel.swift */; };
 		7764C3612ED848CB005C4C92 /* DashboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3602ED848CB005C4C92 /* DashboardService.swift */; };
 		7764C3632ED848CB005C4C92 /* WeeklyStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3622ED848CB005C4C92 /* WeeklyStats.swift */; };
 		7764C3652ED848CB005C4C92 /* WorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3642ED848CB005C4C92 /* WorkoutSession.swift */; };
@@ -71,6 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		771591472EDA2634005F1B58 /* AnalysisModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisModel.swift; sourceTree = "<group>"; };
+		771591492EDA2662005F1B58 /* AnalysisViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisViewModel.swift; sourceTree = "<group>"; };
 		7764C3602ED848CB005C4C92 /* DashboardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardService.swift; sourceTree = "<group>"; };
 		7764C3622ED848CB005C4C92 /* WeeklyStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyStats.swift; sourceTree = "<group>"; };
 		7764C3642ED848CB005C4C92 /* WorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSession.swift; sourceTree = "<group>"; };
@@ -165,11 +169,11 @@
 		77CA00D52ED837DD007C7C6E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				771591472EDA2634005F1B58 /* AnalysisModel.swift */,
 				77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */,
 				77CA00D42ED837DD007C7C6E /* UserModel.swift */,
 				77CA01012ED83DB7007C7C6E /* WorkoutModel.swift */,
 				779422B12EDA193D00E3EDDF /* ProfileModel.swift */,
-				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -220,6 +224,8 @@
 		77CA00E62ED837DD007C7C6E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				771591492EDA2662005F1B58 /* AnalysisViewModel.swift */,
+				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
 				7764C3702ED84BDD005C4C92 /* DashboardViewModel.swift */,
 				7764C3782ED85005005C4C92 /* HomeViewModel.swift */,
 				77CA00E52ED837DD007C7C6E /* InfoViewModels.swift */,
@@ -434,6 +440,7 @@
 				7764C37C2ED85026005C4C92 /* StatCard.swift in Sources */,
 				77CA01042ED83DB7007C7C6E /* WorkoutService.swift in Sources */,
 				77CA00ED2ED837DD007C7C6E /* OnboardingModel.swift in Sources */,
+				7715914A2EDA2662005F1B58 /* AnalysisViewModel.swift in Sources */,
 				77CA01022ED83DB7007C7C6E /* WorkoutModel.swift in Sources */,
 				77CA010E2ED83DB8007C7C6E /* MainTabView.swift in Sources */,
 				7764C3612ED848CB005C4C92 /* DashboardService.swift in Sources */,
@@ -449,6 +456,7 @@
 				77CA00F12ED837DD007C7C6E /* fitness_assistantApp.swift in Sources */,
 				7764C3632ED848CB005C4C92 /* WeeklyStats.swift in Sources */,
 				7764C3712ED84BDD005C4C92 /* DashboardViewModel.swift in Sources */,
+				771591482EDA263B005F1B58 /* AnalysisModel.swift in Sources */,
 				7764C3732ED84C1C005C4C92 /* DashboardHeaderView.swift in Sources */,
 				779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */,
 				7764C37E2ED8502E005C4C92 /* AITrackerCard.swift in Sources */,
