@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 # Session Exercise Run schemas
@@ -13,13 +13,12 @@ class SessionExerciseRunCreate(SessionExerciseRunBase):
 
 
 class SessionExerciseRunResponse(SessionExerciseRunBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     session_id: int
     start_time: datetime
     end_time: datetime | None
-
-    class Config:
-        from_attributes = True
 
 
 # Session schemas
@@ -38,14 +37,13 @@ class SessionUpdate(BaseModel):
 
 
 class SessionResponse(SessionBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     user_id: int
     start_time: datetime
     end_time: datetime | None
     exercise_runs: list[SessionExerciseRunResponse] = []
-
-    class Config:
-        from_attributes = True
 
 
 class SessionListResponse(BaseModel):

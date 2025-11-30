@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UserBase(BaseModel):
@@ -23,14 +23,13 @@ class UserUpdate(BaseModel):
 
 
 class UserResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     email: str
     role: str | None
     created_at: datetime | None
     last_login: datetime | None
-
-    class Config:
-        from_attributes = True
 
 
 # User Measurement schemas
@@ -44,9 +43,8 @@ class UserMeasurementCreate(UserMeasurementBase):
 
 
 class UserMeasurementResponse(UserMeasurementBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     user_id: int
     measured_at: datetime
-
-    class Config:
-        from_attributes = True

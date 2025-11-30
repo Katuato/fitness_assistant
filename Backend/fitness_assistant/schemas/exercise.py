@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from fitness_assistant.enums.exercise_enums import (
     ExerciseForce,
@@ -13,21 +13,17 @@ from fitness_assistant.enums.exercise_enums import (
 
 
 class MuscleResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     name: str
-
-    class Config:
-        from_attributes = True
 
 
 class EquipmentResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     name: str
-
-    class Config:
-        from_attributes = True
 
 
 class ExerciseMuscleResponse(BaseModel):
@@ -38,12 +34,10 @@ class ExerciseMuscleResponse(BaseModel):
 
 
 class ExerciseImageResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     image_path: str
-
-    class Config:
-        from_attributes = True
 
 
 class ExerciseBase(BaseModel):
@@ -58,14 +52,12 @@ class ExerciseBase(BaseModel):
 
 
 class ExerciseResponse(ExerciseBase):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     created_at: datetime | None
     muscles: list[ExerciseMuscleResponse] = []
     images: list[ExerciseImageResponse] = []
-
-    class Config:
-        from_attributes = True
 
 
 class ExerciseListResponse(BaseModel):

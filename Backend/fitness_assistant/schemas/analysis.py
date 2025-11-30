@@ -3,7 +3,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # Analysis Task schemas
@@ -19,6 +19,7 @@ class AnalysisTaskCreate(AnalysisTaskBase):
 
 
 class AnalysisTaskResponse(AnalysisTaskBase):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     status: str
@@ -27,11 +28,9 @@ class AnalysisTaskResponse(AnalysisTaskBase):
     started_at: datetime | None
     finished_at: datetime | None
 
-    class Config:
-        from_attributes = True
-
 
 class AnalysisResultResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     task_id: int
@@ -40,9 +39,6 @@ class AnalysisResultResponse(BaseModel):
     score: Decimal | None = Field(ge=0, le=100)
     thumbnails: dict | None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class AnalysisTaskWithResultResponse(AnalysisTaskResponse):

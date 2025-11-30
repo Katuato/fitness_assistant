@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from fitness_assistant.enums.media_enums import MediaType
 
@@ -23,14 +23,12 @@ class MediaCreate(MediaBase):
 
 class MediaResponse(MediaBase):
     """Схема для ответа медиа файла."""
+    model_config = ConfigDict(from_attributes=True)
 
     id: int
     owner_user: int | None
     s3_key: str | None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class MediaListResponse(BaseModel):
