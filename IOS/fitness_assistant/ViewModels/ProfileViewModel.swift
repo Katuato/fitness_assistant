@@ -28,12 +28,12 @@ class ProfileViewModel: ObservableObject {
         startGradientAnimation()
     }
     
-    nonisolated deinit {
-        // Останавливаем таймер без обращения к @MainActor методам
-        Task { @MainActor [weak gradientTimer] in
-            gradientTimer?.invalidate()
-        }
-    }
+//    nonisolated deinit {
+//        // Останавливаем таймер без обращения к @MainActor методам
+//        Task { @MainActor [weak gradientTimer] in
+//            gradientTimer?.invalidate()
+//        }
+//    }
     
     // MARK: - Data Loading
     func loadMockData() {

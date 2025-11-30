@@ -15,9 +15,11 @@ class OnboardingService: ObservableObject {
     }
     
     init() {
-        self.hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        //Онбординг работает при каждом запускe: для возвращение коректной работы удалить 19 строку и раскомментировать
+        self.hasCompletedOnboarding = false
+//        self.hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
     }
-    
+
     func completeOnboarding() {
         hasCompletedOnboarding = true
     }

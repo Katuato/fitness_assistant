@@ -79,7 +79,7 @@ struct MainTabView: View {
             ZStack {
                 Color.customBackground.ignoresSafeArea()
                 ProfileView()
-                    .environmentObject(onboardingService)
+//                    .environmentObject(onboardingService)
             }
             .tabItem {
                 Image(systemName: selectedTab == 3 ? "person.fill" : "person")

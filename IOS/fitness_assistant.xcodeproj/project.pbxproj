@@ -50,6 +50,10 @@
 		77CA01082ED83DB8007C7C6E /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA01072ED83DB8007C7C6E /* AnalysisView.swift */; };
 		77CA010C2ED83DB8007C7C6E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA010B2ED83DB8007C7C6E /* ProfileView.swift */; };
 		77CA010E2ED83DB8007C7C6E /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA010D2ED83DB8007C7C6E /* MainTabView.swift */; };
+		E90A2B6B2EDAC1780084BFF4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6A2EDAC1780084BFF4 /* AuthService.swift */; };
+		E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */; };
+		E90A2B6F2EDACC570084BFF4 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */; };
+		E90A2B712EDACF070084BFF4 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */; };
 		E9AA36AA2ED49C7D00CEF4ED /* fitness_assistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36A92ED49C7D00CEF4ED /* fitness_assistantTests.swift */; };
 		E9AA36B42ED49C7D00CEF4ED /* fitness_assistantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B32ED49C7D00CEF4ED /* fitness_assistantUITests.swift */; };
 		E9AA36B62ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B52ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift */; };
@@ -116,6 +120,10 @@
 		77CA01072ED83DB8007C7C6E /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		77CA010B2ED83DB8007C7C6E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		77CA010D2ED83DB8007C7C6E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		E90A2B6A2EDAC1780084BFF4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
 		E9AA36952ED49C7C00CEF4ED /* fitness_assistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fitness_assistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9AA36A52ED49C7D00CEF4ED /* fitness_assistantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fitness_assistantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9AA36A92ED49C7D00CEF4ED /* fitness_assistantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fitness_assistantTests.swift; sourceTree = "<group>"; };
@@ -193,6 +201,7 @@
 				77CA00D82ED837DD007C7C6E /* InfoServices.swift */,
 				77CA00D92ED837DD007C7C6E /* OnboardingService.swift */,
 				77CA01032ED83DB7007C7C6E /* WorkoutService.swift */,
+				E90A2B6A2EDAC1780084BFF4 /* AuthService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -243,6 +252,9 @@
 				77CA010B2ED83DB8007C7C6E /* ProfileView.swift */,
 				77CA010D2ED83DB8007C7C6E /* MainTabView.swift */,
 				7764C3722ED84C1C005C4C92 /* DashboardHeaderView.swift */,
+				E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */,
+				E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */,
+				E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -438,6 +450,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7764C37C2ED85026005C4C92 /* StatCard.swift in Sources */,
+				E90A2B6F2EDACC570084BFF4 /* ForgotPasswordView.swift in Sources */,
+				E90A2B6B2EDAC1780084BFF4 /* AuthService.swift in Sources */,
 				77CA01042ED83DB7007C7C6E /* WorkoutService.swift in Sources */,
 				77CA00ED2ED837DD007C7C6E /* OnboardingModel.swift in Sources */,
 				7715914A2EDA2662005F1B58 /* AnalysisViewModel.swift in Sources */,
@@ -462,12 +476,14 @@
 				7764C37E2ED8502E005C4C92 /* AITrackerCard.swift in Sources */,
 				77CA00F22ED837DD007C7C6E /* UserModel.swift in Sources */,
 				7764C3752ED84C25005C4C92 /* RecentSessionsSection.swift in Sources */,
+				E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */,
 				77CA00F32ED837DD007C7C6E /* InfoViewModels.swift in Sources */,
 				77CA01082ED83DB8007C7C6E /* AnalysisView.swift in Sources */,
 				7764C3792ED85005005C4C92 /* HomeViewModel.swift in Sources */,
 				7764C36B2ED848EA005C4C92 /* DashboardView.swift in Sources */,
 				77CA01062ED83DB8007C7C6E /* HomeView.swift in Sources */,
 				77CA00F42ED837DD007C7C6E /* InfoServices.swift in Sources */,
+				E90A2B712EDACF070084BFF4 /* CreateAccountView.swift in Sources */,
 				7764C3802ED85038005C4C92 /* ExerciseCard.swift in Sources */,
 				77CA00F52ED837DD007C7C6E /* ContentView.swift in Sources */,
 				7764C3822ED8503F005C4C92 /* AddExerciseButton.swift in Sources */,

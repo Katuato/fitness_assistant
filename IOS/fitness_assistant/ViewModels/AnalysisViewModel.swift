@@ -32,11 +32,11 @@ final class AnalysisViewModel: ObservableObject {
         startGradientAnimation()
     }
     
-    nonisolated deinit {
-        Task { @MainActor [weak gradientTimer] in
-            gradientTimer?.invalidate()
-        }
-    }
+//    nonisolated deinit {
+//        Task { @MainActor [weak gradientTimer] in
+//            gradientTimer?.invalidate()
+//        }
+//    }
     
     // MARK: - Computed
     
