@@ -24,6 +24,9 @@
 		7764C3802ED85038005C4C92 /* ExerciseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C37F2ED85038005C4C92 /* ExerciseCard.swift */; };
 		7764C3822ED8503F005C4C92 /* AddExerciseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3812ED8503F005C4C92 /* AddExerciseButton.swift */; };
 		7764C3842ED85045005C4C92 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7764C3832ED85045005C4C92 /* HomeHeaderView.swift */; };
+		7787B5542EDF14CA00602342 /* ExercisePreviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7787B5532EDF14CA00602342 /* ExercisePreviewModel.swift */; };
+		7787B5562EDF14D800602342 /* ExercisePreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7787B5552EDF14D800602342 /* ExercisePreviewViewModel.swift */; };
+		7787B5582EDF151200602342 /* ExercisePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7787B5572EDF151200602342 /* ExercisePreviewView.swift */; };
 		779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779422B12EDA193D00E3EDDF /* ProfileModel.swift */; };
 		779422B42EDA194B00E3EDDF /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */; };
 		77CA00ED2ED837DD007C7C6E /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */; };
@@ -94,6 +97,9 @@
 		7764C37F2ED85038005C4C92 /* ExerciseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCard.swift; sourceTree = "<group>"; };
 		7764C3812ED8503F005C4C92 /* AddExerciseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseButton.swift; sourceTree = "<group>"; };
 		7764C3832ED85045005C4C92 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		7787B5532EDF14CA00602342 /* ExercisePreviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePreviewModel.swift; sourceTree = "<group>"; };
+		7787B5552EDF14D800602342 /* ExercisePreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePreviewViewModel.swift; sourceTree = "<group>"; };
+		7787B5572EDF151200602342 /* ExercisePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePreviewView.swift; sourceTree = "<group>"; };
 		779422B12EDA193D00E3EDDF /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
@@ -168,7 +174,6 @@
 				7764C3682ED848E0005C4C92 /* WeeklyStatsCard.swift */,
 				7764C37B2ED85026005C4C92 /* StatCard.swift */,
 				7764C3812ED8503F005C4C92 /* AddExerciseButton.swift */,
-				7764C3832ED85045005C4C92 /* HomeHeaderView.swift */,
 				7764C3742ED84C25005C4C92 /* RecentSessionsSection.swift */,
 			);
 			path = Components;
@@ -178,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				771591472EDA2634005F1B58 /* AnalysisModel.swift */,
+				7787B5532EDF14CA00602342 /* ExercisePreviewModel.swift */,
 				77CA00D32ED837DD007C7C6E /* OnboardingModel.swift */,
 				77CA00D42ED837DD007C7C6E /* UserModel.swift */,
 				77CA01012ED83DB7007C7C6E /* WorkoutModel.swift */,
@@ -237,6 +243,7 @@
 				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
 				7764C3702ED84BDD005C4C92 /* DashboardViewModel.swift */,
 				7764C3782ED85005005C4C92 /* HomeViewModel.swift */,
+				7787B5552EDF14D800602342 /* ExercisePreviewViewModel.swift */,
 				77CA00E52ED837DD007C7C6E /* InfoViewModels.swift */,
 			);
 			path = ViewModels;
@@ -245,6 +252,7 @@
 		77CA00E82ED837DD007C7C6E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7764C3832ED85045005C4C92 /* HomeHeaderView.swift */,
 				7764C36A2ED848EA005C4C92 /* DashboardView.swift */,
 				77CA00E72ED837DD007C7C6E /* OnboardingView.swift */,
 				77CA01052ED83DB8007C7C6E /* HomeView.swift */,
@@ -255,6 +263,7 @@
 				E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */,
 				E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */,
 				E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */,
+				7787B5572EDF151200602342 /* ExercisePreviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -450,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7764C37C2ED85026005C4C92 /* StatCard.swift in Sources */,
+				7787B5582EDF151200602342 /* ExercisePreviewView.swift in Sources */,
 				E90A2B6F2EDACC570084BFF4 /* ForgotPasswordView.swift in Sources */,
 				E90A2B6B2EDAC1780084BFF4 /* AuthService.swift in Sources */,
 				77CA01042ED83DB7007C7C6E /* WorkoutService.swift in Sources */,
@@ -473,12 +483,14 @@
 				771591482EDA263B005F1B58 /* AnalysisModel.swift in Sources */,
 				7764C3732ED84C1C005C4C92 /* DashboardHeaderView.swift in Sources */,
 				779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */,
+				7787B5542EDF14CA00602342 /* ExercisePreviewModel.swift in Sources */,
 				7764C37E2ED8502E005C4C92 /* AITrackerCard.swift in Sources */,
 				77CA00F22ED837DD007C7C6E /* UserModel.swift in Sources */,
 				7764C3752ED84C25005C4C92 /* RecentSessionsSection.swift in Sources */,
 				E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */,
 				77CA00F32ED837DD007C7C6E /* InfoViewModels.swift in Sources */,
 				77CA01082ED83DB8007C7C6E /* AnalysisView.swift in Sources */,
+				7787B5562EDF14D800602342 /* ExercisePreviewViewModel.swift in Sources */,
 				7764C3792ED85005005C4C92 /* HomeViewModel.swift in Sources */,
 				7764C36B2ED848EA005C4C92 /* DashboardView.swift in Sources */,
 				77CA01062ED83DB8007C7C6E /* HomeView.swift in Sources */,

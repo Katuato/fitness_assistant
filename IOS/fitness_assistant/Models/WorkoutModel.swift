@@ -14,13 +14,18 @@ struct WorkoutStats: Identifiable {
     let accuracy: Int
 }
 
-struct Exercise: Identifiable {
+struct Exercise: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let sets: Int
     let reps: Int
     let accuracy: Int?
     let isCompleted: Bool
+    
+    // Equatable conformance - compare by id
+    static func == (lhs: Exercise, rhs: Exercise) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 struct WorkoutPlan: Identifiable {

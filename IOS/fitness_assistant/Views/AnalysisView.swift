@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
+    @State private var selectedExerciseForPreview: Exercise?
     
     private var brandPurple: Color {
         Color(red: 0x73/255, green: 0x71/255, blue: 0xDF/255)
@@ -24,66 +25,98 @@ struct AnalysisView: View {
     
     var body: some View {
         ZStack {
-            Color.customBackground
-                .ignoresSafeArea()
+            // Main content with conditional blur
+            ZStack {
+                Color.customBackground
+                    .ignoresSafeArea()
+                
+                VStack(alignment: .leading, spacing: 24) {
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Real-time form correction")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.55))
+                        
+                        Text("AI Posture Tracker")
+                            .font(.system(size: 30, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 16)
+                    .padding(.horizontal, 16)
+                    
+                    AnalysisCameraCard(
+                        gradientRotation: viewModel.gradientRotation,
+                        brandPurple: brandPurple,
+                        brandOrange: brandOrange,
+                        isRecording: viewModel.isRecording,
+                        toggleRecording: viewModel.toggleRecording
+                    )
+                    .padding(.horizontal, 16)
+                    
+                    HStack(spacing: 12) {
+                        MetricCard(title: "Reps", value: "\(viewModel.stats.reps)")
+                        MetricCard(title: "Sets", value: "\(viewModel.stats.sets)")
+                        MetricCard(title: "Time", value: viewModel.formattedTime)
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    HStack {
+                        Text("Suggested Exercises")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Button(action: viewModel.viewAllExercises) {
+                            Text("View All")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(brandOrange)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    VStack(spacing: 10) {
+                        ForEach(viewModel.suggestedExercises.prefix(2)) { exercise in
+                            ExerciseRow(
+                                exercise: exercise,
+                                accentGreen: accentGreen,
+                                action: { 
+                                    // Convert AnalysisExercise to Exercise for preview
+                                    let exerciseForPreview = Exercise(
+                                        name: exercise.name,
+                                        sets: 3,
+                                        reps: 12,
+                                        accuracy: nil,
+                                        isCompleted: false
+                                    )
+                                    selectedExerciseForPreview = exerciseForPreview
+                                }
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    Spacer(minLength: 40)
+                }
+            }
+            .blur(radius: selectedExerciseForPreview != nil ? 10 : 0)
+            .animation(.easeInOut(duration: 0.3), value: selectedExerciseForPreview != nil)
             
-            VStack(alignment: .leading, spacing: 24) {
-                
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Real-time form correction")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.white.opacity(0.55))
-                    
-                    Text("AI Posture Tracker")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundColor(.white)
-                }
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
-                
-                AnalysisCameraCard(
-                    gradientRotation: viewModel.gradientRotation,
-                    brandPurple: brandPurple,
-                    brandOrange: brandOrange,
-                    isRecording: viewModel.isRecording,
-                    toggleRecording: viewModel.toggleRecording
+            // Exercise Preview Sheet (NOT blurred)
+            if let exercise = selectedExerciseForPreview {
+                ExercisePreviewView(
+                    exercise: exercise,
+                    onDismiss: {
+                        selectedExerciseForPreview = nil
+                    },
+                    onStartTracking: {
+                        // Already on Analysis view, just dismiss
+                        selectedExerciseForPreview = nil
+                        viewModel.isRecording = true
+                    }
                 )
-                .padding(.horizontal, 16)
-                
-                HStack(spacing: 12) {
-                    MetricCard(title: "Reps", value: "\(viewModel.stats.reps)")
-                    MetricCard(title: "Sets", value: "\(viewModel.stats.sets)")
-                    MetricCard(title: "Time", value: viewModel.formattedTime)
-                }
-                .padding(.horizontal, 16)
-                
-                HStack {
-                    Text("Suggested Exercises")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Button(action: viewModel.viewAllExercises) {
-                        Text("View All")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(brandOrange)
-                    }
-                }
-                .padding(.horizontal, 16)
-                
-                VStack(spacing: 10) {
-                    ForEach(viewModel.suggestedExercises.prefix(2)) { exercise in
-                        ExerciseRow(
-                            exercise: exercise,
-                            accentGreen: accentGreen,
-                            action: { viewModel.selectExercise(exercise) }
-                        )
-                    }
-                }
-                .padding(.horizontal, 16)
-                
-                Spacer(minLength: 40)
+                .zIndex(999)
+                .ignoresSafeArea()
             }
         }
     }

@@ -9,6 +9,16 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
+    @Binding var navigateToAnalysis: Bool
+    @Binding var selectedExerciseForPreview: Exercise?
+    
+    init(
+        navigateToAnalysis: Binding<Bool> = .constant(false),
+        selectedExerciseForPreview: Binding<Exercise?> = .constant(nil)
+    ) {
+        self._navigateToAnalysis = navigateToAnalysis
+        self._selectedExerciseForPreview = selectedExerciseForPreview
+    }
     
     var body: some View {
         ZStack {
@@ -71,6 +81,10 @@ struct HomeView: View {
                                 exercise: exercise,
                                 onPlayTapped: {
                                     viewModel.startExercise(exercise)
+                                    navigateToAnalysis = true
+                                },
+                                onCardTapped: {
+                                    selectedExerciseForPreview = exercise
                                 }
                             )
                         }

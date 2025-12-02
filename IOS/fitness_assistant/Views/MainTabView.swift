@@ -11,6 +11,8 @@ struct MainTabView: View {
     @StateObject private var workoutService = WorkoutService()
     @EnvironmentObject var onboardingService: OnboardingService
     @State private var selectedTab = 0
+    @State private var shouldNavigateToAnalysis = false
+    @State private var selectedExerciseForPreview: Exercise?
     
     init() {
         let appearance = UITabBarAppearance()
@@ -43,52 +45,83 @@ struct MainTabView: View {
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // TAB 0 — Home
-            ZStack {
-                Color.customBackground.ignoresSafeArea()
-                HomeView()
+        ZStack {
+            // Main Tab View
+            TabView(selection: $selectedTab) {
+                // TAB 0 — Home
+                ZStack {
+                    Color.customBackground.ignoresSafeArea()
+                    HomeView(
+                        navigateToAnalysis: $shouldNavigateToAnalysis,
+                        selectedExerciseForPreview: $selectedExerciseForPreview
+                    )
                     .environmentObject(workoutService)
+                }
+                .tabItem {
+                    Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
+                }
+                .tag(0)
+                
+                // TAB 1 — Analysis
+                ZStack {
+                    Color.customBackground.ignoresSafeArea()
+                    AnalysisView()
+                }
+                .tabItem {
+                    Image(systemName: selectedTab == 1 ? "video.fill" : "video")
+                }
+                .tag(1)
+                
+                // TAB 2 — Dashboard
+                ZStack {
+                    Color.customBackground.ignoresSafeArea()
+                    DashboardView()
+                }
+                .tabItem {
+                    Image(systemName: selectedTab == 2 ? "chart.xyaxis.line" : "chart.line.uptrend.xyaxis")
+                }
+                .tag(2)
+                
+                // TAB 3 — Profile
+                ZStack {
+                    Color.customBackground.ignoresSafeArea()
+                    ProfileView()
+    //                    .environmentObject(onboardingService)
+                }
+                .tabItem {
+                    Image(systemName: selectedTab == 3 ? "person.fill" : "person")
+                }
+                .tag(3)
             }
-            .tabItem {
-                Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
+            .tint(.orange)
+            .toolbarBackground(.hidden, for: .tabBar)
+            .background(Color.customBackground.ignoresSafeArea())
+            .blur(radius: selectedExerciseForPreview != nil ? 10 : 0)
+            .onChange(of: shouldNavigateToAnalysis) { oldValue, newValue in
+                if newValue {
+                    selectedTab = 1
+                    shouldNavigateToAnalysis = false
+                }
             }
-            .tag(0)
             
-            // TAB 1 — Analysis
-            ZStack {
-                Color.customBackground.ignoresSafeArea()
-                AnalysisView()
+            // Exercise Preview Overlay - Covers EVERYTHING including tab bar
+            if let exercise = selectedExerciseForPreview {
+                ExercisePreviewView(
+                    exercise: exercise,
+                    onDismiss: {
+                        selectedExerciseForPreview = nil
+                    },
+                    onStartTracking: {
+                        shouldNavigateToAnalysis = true
+                        selectedExerciseForPreview = nil
+                    }
+                )
+                .zIndex(999)
+                .ignoresSafeArea()
+                .transition(.opacity)
             }
-            .tabItem {
-                Image(systemName: selectedTab == 1 ? "video.fill" : "video")
-            }
-            .tag(1)
-            
-            // TAB 2 — Dashboard
-            ZStack {
-                Color.customBackground.ignoresSafeArea()
-                DashboardView()
-            }
-            .tabItem {
-                Image(systemName: selectedTab == 2 ? "chart.xyaxis.line" : "chart.line.uptrend.xyaxis")
-            }
-            .tag(2)
-            
-            // TAB 3 — Profile
-            ZStack {
-                Color.customBackground.ignoresSafeArea()
-                ProfileView()
-//                    .environmentObject(onboardingService)
-            }
-            .tabItem {
-                Image(systemName: selectedTab == 3 ? "person.fill" : "person")
-            }
-            .tag(3)
         }
-        .tint(.orange)
-        .toolbarBackground(.hidden, for: .tabBar)
-        .background(Color.customBackground.ignoresSafeArea())
+        .animation(.easeInOut(duration: 0.3), value: selectedExerciseForPreview != nil)
     }
 }
 

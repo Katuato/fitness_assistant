@@ -14,20 +14,13 @@ struct FitnessAssistantApp: App {
     @StateObject private var authService = AuthService() 
     var body: some Scene {
         WindowGroup {
-            // MARK: - Временно отключен онбординг для тестирования
-            // MainTabView()
-            
-            // MARK: - Раскомментируйте код ниже, чтобы включить онбординг
-            
             Group {
                 if onboardingService.hasCompletedOnboarding {
-                    MainTabView()
-                        .environmentObject(onboardingService)
-
                     if authService.isAuthenticated {
                         MainTabView()
+                            .environmentObject(onboardingService)
                     } else {
-                            AuthView()
+                        AuthView()
                             .environmentObject(authService)
                     }
                 } else {
@@ -37,7 +30,6 @@ struct FitnessAssistantApp: App {
             }
             .animation(.easeInOut, value: onboardingService.hasCompletedOnboarding)
             .animation(.easeInOut, value: authService.isAuthenticated)
-            
         }
     }
 }
