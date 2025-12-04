@@ -53,6 +53,12 @@
 		77CA01082ED83DB8007C7C6E /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA01072ED83DB8007C7C6E /* AnalysisView.swift */; };
 		77CA010C2ED83DB8007C7C6E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA010B2ED83DB8007C7C6E /* ProfileView.swift */; };
 		77CA010E2ED83DB8007C7C6E /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CA010D2ED83DB8007C7C6E /* MainTabView.swift */; };
+		77D2B55C2EE20EE500183DF4 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B55B2EE20EE500183DF4 /* ExerciseCategory.swift */; };
+		77D2B55E2EE20EF500183DF4 /* AddExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B55D2EE20EF500183DF4 /* AddExerciseViewModel.swift */; };
+		77D2B5602EE20F1100183DF4 /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B55F2EE20F1100183DF4 /* AddExerciseView.swift */; };
+		77D2B5622EE20F2400183DF4 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B5612EE20F2400183DF4 /* CategorySelectionView.swift */; };
+		77D2B5642EE20F3800183DF4 /* ExerciseGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B5632EE20F3800183DF4 /* ExerciseGridView.swift */; };
+		77D2B5662EE20F5700183DF4 /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2B5652EE20F5700183DF4 /* ExerciseDetailView.swift */; };
 		E90A2B6B2EDAC1780084BFF4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6A2EDAC1780084BFF4 /* AuthService.swift */; };
 		E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */; };
 		E90A2B6F2EDACC570084BFF4 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */; };
@@ -126,6 +132,12 @@
 		77CA01072ED83DB8007C7C6E /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		77CA010B2ED83DB8007C7C6E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		77CA010D2ED83DB8007C7C6E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		77D2B55B2EE20EE500183DF4 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
+		77D2B55D2EE20EF500183DF4 /* AddExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseViewModel.swift; sourceTree = "<group>"; };
+		77D2B55F2EE20F1100183DF4 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
+		77D2B5612EE20F2400183DF4 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
+		77D2B5632EE20F3800183DF4 /* ExerciseGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseGridView.swift; sourceTree = "<group>"; };
+		77D2B5652EE20F5700183DF4 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 		E90A2B6A2EDAC1780084BFF4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
@@ -188,6 +200,7 @@
 				77CA00D42ED837DD007C7C6E /* UserModel.swift */,
 				77CA01012ED83DB7007C7C6E /* WorkoutModel.swift */,
 				779422B12EDA193D00E3EDDF /* ProfileModel.swift */,
+				77D2B55B2EE20EE500183DF4 /* ExerciseCategory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -240,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				771591492EDA2662005F1B58 /* AnalysisViewModel.swift */,
+				77D2B55D2EE20EF500183DF4 /* AddExerciseViewModel.swift */,
 				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
 				7764C3702ED84BDD005C4C92 /* DashboardViewModel.swift */,
 				7764C3782ED85005005C4C92 /* HomeViewModel.swift */,
@@ -252,6 +266,10 @@
 		77CA00E82ED837DD007C7C6E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				77D2B5632EE20F3800183DF4 /* ExerciseGridView.swift */,
+				77D2B5652EE20F5700183DF4 /* ExerciseDetailView.swift */,
+				77D2B55F2EE20F1100183DF4 /* AddExerciseView.swift */,
+				77D2B5612EE20F2400183DF4 /* CategorySelectionView.swift */,
 				7764C3832ED85045005C4C92 /* HomeHeaderView.swift */,
 				7764C36A2ED848EA005C4C92 /* DashboardView.swift */,
 				77CA00E72ED837DD007C7C6E /* OnboardingView.swift */,
@@ -467,6 +485,7 @@
 				7715914A2EDA2662005F1B58 /* AnalysisViewModel.swift in Sources */,
 				77CA01022ED83DB7007C7C6E /* WorkoutModel.swift in Sources */,
 				77CA010E2ED83DB8007C7C6E /* MainTabView.swift in Sources */,
+				77D2B5662EE20F5700183DF4 /* ExerciseDetailView.swift in Sources */,
 				7764C3612ED848CB005C4C92 /* DashboardService.swift in Sources */,
 				7764C3652ED848CB005C4C92 /* WorkoutSession.swift in Sources */,
 				7764C3842ED85045005C4C92 /* HomeHeaderView.swift in Sources */,
@@ -474,12 +493,14 @@
 				77CA00EE2ED837DD007C7C6E /* OnboardingService.swift in Sources */,
 				77CA00EF2ED837DD007C7C6E /* OnboardingView.swift in Sources */,
 				77CA00F02ED837DD007C7C6E /* Color.swift in Sources */,
+				77D2B55E2EE20EF500183DF4 /* AddExerciseViewModel.swift in Sources */,
 				77CA010C2ED83DB8007C7C6E /* ProfileView.swift in Sources */,
 				7764C3692ED848E0005C4C92 /* WeeklyStatsCard.swift in Sources */,
 				779422B42EDA194B00E3EDDF /* ProfileViewModel.swift in Sources */,
 				77CA00F12ED837DD007C7C6E /* fitness_assistantApp.swift in Sources */,
 				7764C3632ED848CB005C4C92 /* WeeklyStats.swift in Sources */,
 				7764C3712ED84BDD005C4C92 /* DashboardViewModel.swift in Sources */,
+				77D2B5622EE20F2400183DF4 /* CategorySelectionView.swift in Sources */,
 				771591482EDA263B005F1B58 /* AnalysisModel.swift in Sources */,
 				7764C3732ED84C1C005C4C92 /* DashboardHeaderView.swift in Sources */,
 				779422B22EDA193D00E3EDDF /* ProfileModel.swift in Sources */,
@@ -489,11 +510,14 @@
 				7764C3752ED84C25005C4C92 /* RecentSessionsSection.swift in Sources */,
 				E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */,
 				77CA00F32ED837DD007C7C6E /* InfoViewModels.swift in Sources */,
+				77D2B55C2EE20EE500183DF4 /* ExerciseCategory.swift in Sources */,
 				77CA01082ED83DB8007C7C6E /* AnalysisView.swift in Sources */,
 				7787B5562EDF14D800602342 /* ExercisePreviewViewModel.swift in Sources */,
 				7764C3792ED85005005C4C92 /* HomeViewModel.swift in Sources */,
+				77D2B5602EE20F1100183DF4 /* AddExerciseView.swift in Sources */,
 				7764C36B2ED848EA005C4C92 /* DashboardView.swift in Sources */,
 				77CA01062ED83DB8007C7C6E /* HomeView.swift in Sources */,
+				77D2B5642EE20F3800183DF4 /* ExerciseGridView.swift in Sources */,
 				77CA00F42ED837DD007C7C6E /* InfoServices.swift in Sources */,
 				E90A2B712EDACF070084BFF4 /* CreateAccountView.swift in Sources */,
 				7764C3802ED85038005C4C92 /* ExerciseCard.swift in Sources */,

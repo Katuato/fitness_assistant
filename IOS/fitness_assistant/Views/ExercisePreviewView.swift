@@ -442,6 +442,7 @@ struct MusclePill: View {
 struct InstructionRow: View {
     let number: Int
     let text: String
+    var accentColor: Color = Color(red: 0x39/255, green: 0xD9/255, blue: 0x63/255)
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -451,7 +452,7 @@ struct InstructionRow: View {
                 .frame(width: 28, height: 28)
                 .background(
                     Circle()
-                        .fill(Color(red: 0x39/255, green: 0xD9/255, blue: 0x63/255).opacity(0.2))
+                        .fill(accentColor.opacity(0.2))
                 )
             
             Text(text)

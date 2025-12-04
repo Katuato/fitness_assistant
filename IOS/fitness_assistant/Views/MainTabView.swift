@@ -13,6 +13,7 @@ struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var shouldNavigateToAnalysis = false
     @State private var selectedExerciseForPreview: Exercise?
+    @State private var showAddExercise = false
     
     init() {
         let appearance = UITabBarAppearance()
@@ -53,7 +54,8 @@ struct MainTabView: View {
                     Color.customBackground.ignoresSafeArea()
                     HomeView(
                         navigateToAnalysis: $shouldNavigateToAnalysis,
-                        selectedExerciseForPreview: $selectedExerciseForPreview
+                        selectedExerciseForPreview: $selectedExerciseForPreview,
+                        showAddExercise: $showAddExercise
                     )
                     .environmentObject(workoutService)
                 }
@@ -96,7 +98,7 @@ struct MainTabView: View {
             .tint(.orange)
             .toolbarBackground(.hidden, for: .tabBar)
             .background(Color.customBackground.ignoresSafeArea())
-            .blur(radius: selectedExerciseForPreview != nil ? 10 : 0)
+            .blur(radius: selectedExerciseForPreview != nil || showAddExercise ? 10 : 0)
             .onChange(of: shouldNavigateToAnalysis) { oldValue, newValue in
                 if newValue {
                     selectedTab = 1
@@ -120,8 +122,26 @@ struct MainTabView: View {
                 .ignoresSafeArea()
                 .transition(.opacity)
             }
+            
+            // Add Exercise Overlay - Covers EVERYTHING including tab bar
+            if showAddExercise {
+                AddExerciseView(
+                    onDismiss: {
+                        showAddExercise = false
+                    },
+                    onExerciseAdded: { exercise in
+                        // Add exercise through workoutService
+                        workoutService.addExercise(exercise)
+                        showAddExercise = false
+                    }
+                )
+                .zIndex(999)
+                .ignoresSafeArea()
+                .transition(.opacity)
+            }
         }
         .animation(.easeInOut(duration: 0.3), value: selectedExerciseForPreview != nil)
+        .animation(.easeInOut(duration: 0.3), value: showAddExercise)
     }
 }
 

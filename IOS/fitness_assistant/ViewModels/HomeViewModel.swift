@@ -15,13 +15,21 @@ class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
-    private let workoutService: WorkoutService
+    private var workoutService: WorkoutService?
     
-    init(workoutService: WorkoutService = WorkoutService()) {
+    init(workoutService: WorkoutService? = nil) {
         self.workoutService = workoutService
     }
     
+    func setWorkoutService(_ service: WorkoutService) {
+        self.workoutService = service
+        // Update todaysPlan when service is set
+        self.todaysPlan = service.todaysPlan.exercises
+    }
+    
     func loadData() async {
+        guard let workoutService = workoutService else { return }
+        
         isLoading = true
         errorMessage = nil
         
@@ -44,7 +52,11 @@ class HomeViewModel: ObservableObject {
     }
     
     func addExercise(_ exercise: Exercise) {
-        todaysPlan.append(exercise)
+        workoutService?.addExercise(exercise)
+        // Manually update todaysPlan
+        if let service = workoutService {
+            todaysPlan = service.todaysPlan.exercises
+        }
     }
     
     func startExercise(_ exercise: Exercise) {

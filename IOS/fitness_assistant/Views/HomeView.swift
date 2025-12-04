@@ -9,15 +9,19 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject var workoutService: WorkoutService
     @Binding var navigateToAnalysis: Bool
     @Binding var selectedExerciseForPreview: Exercise?
+    @Binding var showAddExercise: Bool
     
     init(
         navigateToAnalysis: Binding<Bool> = .constant(false),
-        selectedExerciseForPreview: Binding<Exercise?> = .constant(nil)
+        selectedExerciseForPreview: Binding<Exercise?> = .constant(nil),
+        showAddExercise: Binding<Bool> = .constant(false)
     ) {
         self._navigateToAnalysis = navigateToAnalysis
         self._selectedExerciseForPreview = selectedExerciseForPreview
+        self._showAddExercise = showAddExercise
     }
     
     var body: some View {
@@ -54,10 +58,6 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
                 
-                // AI Tracker Card
-                AITrackerCard()
-                    .padding(.horizontal)
-                
                 // Today's Plan
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
@@ -75,26 +75,34 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
                     
-                    VStack(spacing: 12) {
-                        ForEach(viewModel.todaysPlan) { exercise in
-                            ExerciseCard(
-                                exercise: exercise,
-                                onPlayTapped: {
-                                    viewModel.startExercise(exercise)
-                                    navigateToAnalysis = true
-                                },
-                                onCardTapped: {
-                                    selectedExerciseForPreview = exercise
-                                }
-                            )
+                    // Scrollable exercises list
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.todaysPlan) { exercise in
+                                ExerciseCard(
+                                    exercise: exercise,
+                                    onPlayTapped: {
+                                        viewModel.startExercise(exercise)
+                                        navigateToAnalysis = true
+                                    },
+                                    onCardTapped: {
+                                        selectedExerciseForPreview = exercise
+                                    }
+                                )
+                            }
+                            
+                            AddExerciseButton(action: {
+                                showAddExercise = true
+                            })
+                            
+                            // Bottom padding
+                            Color.clear.frame(height: 20)
                         }
-                        
-                        AddExerciseButton()
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
                 
-                Spacer(minLength: 40)
+                Spacer(minLength: 0)
             }
             
             // Loading Overlay
@@ -104,12 +112,17 @@ struct HomeView: View {
             }
         }
         .task {
+            viewModel.setWorkoutService(workoutService)
             await viewModel.loadData()
+        }
+        .onReceive(workoutService.$todaysPlan) { plan in
+            viewModel.todaysPlan = plan.exercises
         }
     }
 }
 
 #Preview {
     HomeView()
+        .environmentObject(WorkoutService())
         .preferredColorScheme(.dark)
 }
