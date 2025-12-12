@@ -10,6 +10,7 @@ import SwiftUI
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
     @State private var selectedExerciseForPreview: Exercise?
+    @State private var showActiveResults = false
     
     private var brandPurple: Color {
         Color(red: 0x73/255, green: 0x71/255, blue: 0xDF/255)
@@ -27,8 +28,7 @@ struct AnalysisView: View {
         ZStack {
             // Main content with conditional blur
             ZStack {
-                Color.customBackground
-                    .ignoresSafeArea()
+                AnimatedBackground()
                 
                 VStack(alignment: .leading, spacing: 24) {
                     
@@ -41,28 +41,37 @@ struct AnalysisView: View {
                             .font(.system(size: 30, weight: .bold))
                             .foregroundColor(.white)
                     }
-                    .padding(.top, 16)
-                    .padding(.horizontal, 16)
+                    .padding(.top, 70)
+                    .padding(.horizontal, 20)
                     
                     AnalysisCameraCard(
                         gradientRotation: viewModel.gradientRotation,
                         brandPurple: brandPurple,
                         brandOrange: brandOrange,
                         isRecording: viewModel.isRecording,
-                        toggleRecording: viewModel.toggleRecording
+                        toggleRecording: {
+                            if viewModel.isRecording {
+                                // Stop recording and show results
+                                viewModel.toggleRecording()
+                                showActiveResults = true
+                            } else {
+                                // Start recording
+                                viewModel.toggleRecording()
+                            }
+                        }
                     )
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
                     
                     HStack(spacing: 12) {
                         MetricCard(title: "Reps", value: "\(viewModel.stats.reps)")
                         MetricCard(title: "Sets", value: "\(viewModel.stats.sets)")
                         MetricCard(title: "Time", value: viewModel.formattedTime)
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
                     
                     HStack {
                         Text("Suggested Exercises")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 18, weight: .bold))
                             .foregroundColor(.white)
                         
                         Spacer()
@@ -73,14 +82,23 @@ struct AnalysisView: View {
                                 .foregroundColor(brandOrange)
                         }
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
                     
                     VStack(spacing: 10) {
                         ForEach(viewModel.suggestedExercises.prefix(2)) { exercise in
-                            ExerciseRow(
-                                exercise: exercise,
-                                accentGreen: accentGreen,
-                                action: { 
+                            ExerciseCard(
+                                exercise: Exercise(
+                                    name: exercise.name,
+                                    sets: 3,
+                                    reps: 12,
+                                    accuracy: nil,
+                                    isCompleted: false
+                                ),
+                                onPlayTapped: {
+                                    // Start tracking this exercise
+                                    showActiveResults = true
+                                },
+                                onCardTapped: {
                                     // Convert AnalysisExercise to Exercise for preview
                                     let exerciseForPreview = Exercise(
                                         name: exercise.name,
@@ -94,13 +112,14 @@ struct AnalysisView: View {
                             )
                         }
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
                     
                     Spacer(minLength: 40)
                 }
             }
-            .blur(radius: selectedExerciseForPreview != nil ? 10 : 0)
+            .blur(radius: selectedExerciseForPreview != nil || showActiveResults ? 10 : 0)
             .animation(.easeInOut(duration: 0.3), value: selectedExerciseForPreview != nil)
+            .animation(.easeInOut(duration: 0.3), value: showActiveResults)
             
             // Exercise Preview Sheet (NOT blurred)
             if let exercise = selectedExerciseForPreview {
@@ -110,12 +129,21 @@ struct AnalysisView: View {
                         selectedExerciseForPreview = nil
                     },
                     onStartTracking: {
-                        // Already on Analysis view, just dismiss
+                        // Dismiss preview and show results
                         selectedExerciseForPreview = nil
-                        viewModel.isRecording = true
+                        showActiveResults = true
                     }
                 )
                 .zIndex(999)
+                .ignoresSafeArea()
+            }
+            
+            // Active Results View (NOT blurred)
+            if showActiveResults {
+                ActiveResultsView(onDismiss: {
+                    showActiveResults = false
+                })
+                .zIndex(1000)
                 .ignoresSafeArea()
             }
         }
@@ -229,55 +257,6 @@ struct MetricCard: View {
                         .stroke(Color.white.opacity(0.12), lineWidth: 1)
                 )
         )
-    }
-}
-
-struct ExerciseRow: View {
-    let exercise: AnalysisExercise
-    let accentGreen: Color
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 14) {
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(accentGreen.opacity(0.2))
-                        .frame(width: 38, height: 38)
-                    
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(accentGreen)
-                }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(exercise.name)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                    
-                    Text("\(exercise.level) • \(exercise.durationSeconds / 60) min")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.6))
-                }
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.white.opacity(0.4))
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(Color.white.opacity(0.04))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 18)
-                            .stroke(Color.white.opacity(0.10), lineWidth: 1)
-                    )
-            )
-        }
     }
 }
 

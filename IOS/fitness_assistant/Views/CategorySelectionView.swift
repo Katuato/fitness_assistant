@@ -21,7 +21,7 @@ struct CategorySelectionView: View {
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
-                    .padding(.top, 8)
+                    .padding(.top, 4)
                 
                 // Categories Grid
                 LazyVGrid(

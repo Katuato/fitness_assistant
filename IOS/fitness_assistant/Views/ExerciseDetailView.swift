@@ -35,7 +35,7 @@ struct ExerciseDetailView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .padding(.top, 20)
+            .padding(.top, 4)
             .padding(.bottom, 8)
             
             // Scrollable content (same structure as ExercisePreviewView)

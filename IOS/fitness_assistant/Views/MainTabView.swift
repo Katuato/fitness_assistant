@@ -58,6 +58,7 @@ struct MainTabView: View {
                         showAddExercise: $showAddExercise
                     )
                     .environmentObject(workoutService)
+                    .padding(.top, 20)
                 }
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")

@@ -21,6 +21,9 @@ struct User: Codable, Identifiable {
     let role: UserRole
     let locale: String?
     
+    //let level: String?
+    //let goal: String?
+    
 }
 
 enum UserRole: String, Codable, CaseIterable {

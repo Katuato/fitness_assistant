@@ -101,10 +101,10 @@ struct AddExerciseView: View {
                 .padding(.top, 12)
                 .padding(.bottom, 8)
             
-            // Header with close button
+            // Header with title and close button
             headerSection()
                 .padding(.horizontal, 20)
-                .padding(.bottom, 16)
+                .padding(.bottom, 20)
             
             // Content based on navigation state
             Group {
@@ -167,17 +167,9 @@ struct AddExerciseView: View {
     
     private func headerSection() -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Add Exercise")
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(.white)
-                
-                if let category = viewModel.selectedCategory {
-                    Text(category.name)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.6))
-                }
-            }
+            Text("Add Exercise")
+                .font(.system(size: 28, weight: .bold))
+                .foregroundColor(.white)
             
             Spacer()
             

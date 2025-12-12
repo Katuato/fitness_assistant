@@ -35,7 +35,7 @@ class DashboardService {
     // TODO: Replace with actual API calls when backend is ready
     
     private func createMockWeeklyStats() -> WeeklyStats {
-        let days = ["M", "T", "W", "T", "F", "S", "S"]
+        let days = ["M", "T", "W", "Th", "F", "S", "Su"]
         let accuracies: [Double] = [85, 88, 92, 89, 95, 91, 93]
         
         let dailyAccuracies = zip(days, accuracies).map { day, accuracy in
