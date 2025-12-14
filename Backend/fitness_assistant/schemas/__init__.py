@@ -37,6 +37,13 @@ from fitness_assistant.schemas.session import (
     SessionResponse,
     SessionUpdate,
 )
+from fitness_assistant.schemas.auth import (
+    ForgotPasswordRequest,
+    LoginRequest,
+    PasswordResetRequest,
+    RegisterRequest,
+    TokenResponse,
+)
 from fitness_assistant.schemas.user import (
     UserCreate,
     UserMeasurementCreate,
@@ -55,6 +62,12 @@ __all__ = [
     "MuscleRole",
     "UserGender",
     "UserRole",
+    # Auth schemas
+    "ForgotPasswordRequest",
+    "LoginRequest",
+    "PasswordResetRequest",
+    "RegisterRequest",
+    "TokenResponse",
     # User schemas
     "UserCreate",
     "UserUpdate",
