@@ -10,6 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     @StateObject private var workoutService = WorkoutService()
     @EnvironmentObject var onboardingService: OnboardingService
+    @EnvironmentObject var authService: AuthService
     @State private var selectedTab = 0
     @State private var shouldNavigateToAnalysis = false
     @State private var selectedExerciseForPreview: Exercise?
@@ -58,7 +59,6 @@ struct MainTabView: View {
                         showAddExercise: $showAddExercise
                     )
                     .environmentObject(workoutService)
-                    .padding(.top, 20)
                 }
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
@@ -89,7 +89,8 @@ struct MainTabView: View {
                 ZStack {
                     Color.customBackground.ignoresSafeArea()
                     ProfileView()
-    //                    .environmentObject(onboardingService)
+                        .environmentObject(onboardingService)
+                        .environmentObject(authService)
                 }
                 .tabItem {
                     Image(systemName: selectedTab == 3 ? "person.fill" : "person")

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreateAccountView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authService: AuthService
     @State private var userName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
@@ -19,12 +20,20 @@ struct CreateAccountView: View {
     @State private var selectedWeight: String = ""
     @State private var selectedLevel: String = ""
     @State private var selectedGoal: String = ""
+    @State private var showPasswordMismatchError: Bool = false
     
     let genders = ["Male", "Female", "Other"]
     let heights = Array(140...220).map { "\($0) cm" }
     let weights = Array(40...150).map { "\($0) kg" }
     let trainingLevels = ["Beginner", "Intermediate", "Advanced", "Professional"]
     let goals = ["Weight Loss", "Muscle Gain", "Maintenance", "Endurance", "General Fitness"]
+    
+    var isFormValid: Bool {
+        !userName.isEmpty && 
+        !email.isEmpty && 
+        password.count >= 6 && 
+        password == confirmPassword
+    }
     
     var body: some View {
         NavigationView {
@@ -114,17 +123,64 @@ struct CreateAccountView: View {
                             )
                         }
 
-                        Button("SIGN UP") {
-                            //Переход на главную страницу
+                        // Password mismatch error
+                        if showPasswordMismatchError && password != confirmPassword {
+                            Text("Passwords do not match")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.red)
+                                .padding(.top, 5)
                         }
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 339, height: 81)
+                        
+                        // Server error message
+                        if let errorMessage = authService.errorMessage {
+                            Text(errorMessage)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.red)
+                                .padding(.top, 5)
+                        }
+
+                        Button(action: {
+                            showPasswordMismatchError = true
+                            if isFormValid {
+                                Task {
+                                    // Форматируем дату в YYYY-MM-DD
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                                    let formattedDate = dateFormatter.string(from: birthDate)
+                                    
+                                    await authService.register(
+                                        email: email,
+                                        password: password,
+                                        name: userName,
+                                        birthDate: formattedDate,
+                                        gender: selectedGender.isEmpty ? nil : selectedGender.lowercased(),
+                                        height: selectedHeight.isEmpty ? nil : selectedHeight,
+                                        weight: selectedWeight.isEmpty ? nil : selectedWeight,
+                                        locale: Locale.current.identifier
+                                    )
+                                    if authService.isAuthenticated {
+                                        dismiss()
+                                    }
+                                }
+                            }
+                        }) {
+                            if authService.isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .frame(width: 339, height: 81)
+                            } else {
+                                Text("SIGN UP")
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .frame(width: 339, height: 81)
+                            }
+                        }
                         .background(Color.white.opacity(0))
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.white, lineWidth: 2)
+                                .stroke(isFormValid ? Color.white : Color.white.opacity(0.5), lineWidth: 2)
                         )
+                        .disabled(authService.isLoading)
                         .padding(.top, 78)
                         
                         Spacer()
@@ -138,10 +194,6 @@ struct CreateAccountView: View {
         .preferredColorScheme(.dark)
     }
     
-    private func createAccount() {
-        // Логика создания аккаунта
-        dismiss()
-    }
 }
 
 struct CustomDatePicker: View {

@@ -10,10 +10,16 @@ import SwiftUI
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @EnvironmentObject var onboardingService: OnboardingService
+    @EnvironmentObject var authService: AuthService
     
     @State private var showFriends = false
     @State private var showEquipment = false
     @State private var showAchievements = false
+    
+    // Setup viewModel with authService when view appears
+    private func setupViewModel() {
+        viewModel.setup(with: authService)
+    }
     
     private var gradientPurple: Color {
         Color(red: 0x73 / 255, green: 0x71 / 255, blue: 0xDF / 255)
@@ -96,6 +102,9 @@ struct ProfileView: View {
                     .padding(.horizontal, 16)
                     
                     Button(action: {
+                        Task {
+                            await authService.logout()
+                        }
                         viewModel.signOut()
                         onboardingService.resetOnboarding()
                     }) {
@@ -123,6 +132,9 @@ struct ProfileView: View {
             }
             .navigationDestination(isPresented: $showAchievements) {
                 AchievementsListView(achievements: viewModel.achievements)
+            }
+            .onAppear {
+                setupViewModel()
             }
         }
     }

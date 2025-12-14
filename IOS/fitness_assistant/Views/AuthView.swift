@@ -44,7 +44,7 @@ struct AuthView: View {
                 VStack(spacing: 11) {
                     CustomTextField(
                         text: $email,
-                        placeholder: "login",
+                        placeholder: "email or username",
                         iconName: "envelope"
                     )
                     
@@ -58,6 +58,14 @@ struct AuthView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 15)
                 
+                // Error message
+                if let errorMessage = authService.errorMessage {
+                    Text(errorMessage)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.red)
+                        .padding(.horizontal, 40)
+                        .padding(.top, 10)
+                }
 
                 HStack() {
                     Button("Create\naccount") {
@@ -84,19 +92,28 @@ struct AuthView: View {
                 
                 
                 Spacer()
-                Button("SIGN IN") {
-//                    authService.login(email: email, password: password)
-                    authService.isAuthenticated = true
-                    
+                Button(action: {
+                    Task {
+                        await authService.login(email: email, password: password)
+                    }
+                }) {
+                    if authService.isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .frame(width: 339, height: 81)
+                    } else {
+                        Text("SIGN IN")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 339, height: 81)
+                    }
                 }
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 339, height: 81)
-                        .background(Color.white.opacity(0))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.white, lineWidth: 2)
-                        )
+                .background(Color.white.opacity(0))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color.white, lineWidth: 2)
+                )
+                .disabled(authService.isLoading || email.isEmpty || password.isEmpty)
                 .padding(.horizontal, 45)
                 .padding(.bottom,70)
             }

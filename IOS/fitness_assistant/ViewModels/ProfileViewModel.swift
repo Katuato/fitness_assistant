@@ -22,10 +22,28 @@ class ProfileViewModel: ObservableObject {
     @Published var gradientRotation: Double = 0.0
     
     private var gradientTimer: Timer?
+    private var authService: AuthService?
     
     init() {
         loadMockData()
         startGradientAnimation()
+    }
+    
+    // MARK: - Setup with AuthService
+    
+    func setup(with authService: AuthService) {
+        self.authService = authService
+        loadUserData(from: authService)
+    }
+    
+    private func loadUserData(from authService: AuthService) {
+        // Используем реальные данные из AuthService
+        self.user = authService.currentUser
+        
+        // Если данных нет, загружаем mock
+        if user == nil {
+            loadMockData()
+        }
     }
     
 //    nonisolated deinit {
@@ -43,22 +61,7 @@ class ProfileViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             
-            // Mock user data
-            self.user = User(
-                id: 1,
-                email: "user@example.com",
-                passwordHash: "",
-                name: "Username",
-                birthDate: "1990-01-01",
-                height: "180",
-                weight: "75",
-                gender: "male",
-                createdAt: Date(),
-                lastLogin: Date(),
-                role: .user,
-                locale: "en"
-            )
-            
+            // Загружаем только вспомогательные данные (не user!)
             self.friends = ProfileMockData.friends
             self.equipment = ProfileMockData.equipment
             self.achievements = ProfileMockData.achievements
@@ -68,16 +71,13 @@ class ProfileViewModel: ObservableObject {
     }
     
     // MARK: - Computed Properties
+    
     var userInitials: String {
-        guard let name = user?.name, name.count >= 2 else {
-            return "UN"
-        }
-        let firstTwo = String(name.prefix(2))
-        return firstTwo.uppercased()
+        user?.initials ?? "UN"
     }
     
     var userName: String {
-        user?.name ?? "Username"
+        user?.displayName ?? "Username"
     }
     
     // MARK: - Gradient Animation

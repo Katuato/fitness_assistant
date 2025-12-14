@@ -19,6 +19,7 @@ struct FitnessAssistantApp: App {
                     if authService.isAuthenticated {
                         MainTabView()
                             .environmentObject(onboardingService)
+                            .environmentObject(authService)
                     } else {
                         AuthView()
                             .environmentObject(authService)
