@@ -10,6 +10,7 @@ from fitness_assistant.repositories.media_repo import MediaRepository
 from fitness_assistant.repositories.session_repo import SessionRepository
 from fitness_assistant.repositories.user_repo import UserRepository
 from fitness_assistant.services.analysis_service import AnalysisService
+from fitness_assistant.services.auth_service import AuthService
 from fitness_assistant.services.exercise_service import ExerciseService
 from fitness_assistant.services.media_service import MediaService
 from fitness_assistant.services.session_service import SessionService
@@ -48,6 +49,10 @@ AnalysisRepo = Annotated[AnalysisRepository, Depends(get_analysis_repo)]
 
 
 # Services
+def get_auth_service(user_repo: UserRepo) -> AuthService:
+    return AuthService(user_repo)
+
+
 def get_user_service(user_repo: UserRepo) -> UserService:
     return UserService(user_repo)
 
@@ -68,6 +73,7 @@ def get_analysis_service(analysis_repo: AnalysisRepo) -> AnalysisService:
     return AnalysisService(analysis_repo)
 
 
+AuthSvc = Annotated[AuthService, Depends(get_auth_service)]
 UserSvc = Annotated[UserService, Depends(get_user_service)]
 ExerciseSvc = Annotated[ExerciseService, Depends(get_exercise_service)]
 SessionSvc = Annotated[SessionService, Depends(get_session_service)]

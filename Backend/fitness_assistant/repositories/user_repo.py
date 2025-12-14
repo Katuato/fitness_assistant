@@ -19,16 +19,45 @@ class UserRepository:
         result = await self.session.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
+    async def get_by_name(self, name: str) -> User | None:
+        result = await self.session.execute(select(User).where(User.name == name))
+        return result.scalar_one_or_none()
+
+    async def get_by_email_or_name(self, identifier: str) -> User | None:
+        result = await self.session.execute(
+            select(User).where((User.email == identifier) | (User.name == identifier))
+        )
+        return result.scalar_one_or_none()
+
     async def create(self, user: User) -> User:
         self.session.add(user)
         await self.session.flush()
         await self.session.refresh(user)
         return user
 
-    async def update(self, user: User, **kwargs: str | int | float | None) -> User:
-        for key, value in kwargs.items():
-            if value is not None:
-                setattr(user, key, value)
+    async def update(self, user: User, name: str | None = None, birth_date: str | None = None,
+                    gender: str | None = None, locale: str | None = None,
+                    last_login: bool = False) -> User:
+        """
+        Обновляет пользователя.
+
+        Разрешено обновлять только безопасные поля профиля.
+        last_login обновляется автоматически при аутентификации.
+        """
+        # Обновляем только разрешенные поля
+        if name is not None:
+            user.name = name
+        if birth_date is not None:
+            user.birth_date = birth_date
+        if gender is not None:
+            user.gender = gender
+        if locale is not None:
+            user.locale = locale
+        if last_login:
+            # Импортируем здесь чтобы избежать circular imports
+            from datetime import datetime, timezone
+            user.last_login = datetime.now(timezone.utc)
+
         await self.session.flush()
         await self.session.refresh(user)
         return user

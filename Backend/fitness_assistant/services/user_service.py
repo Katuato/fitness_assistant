@@ -11,8 +11,13 @@ class UserService:
         return await self.user_repo.get_by_id(user_id)
 
     async def update_user(self, user: User, data: UserUpdate) -> User:
-        update_data = data.model_dump(exclude_unset=True)
-        return await self.user_repo.update(user, **update_data)
+        return await self.user_repo.update(
+            user,
+            name=data.name,
+            birth_date=data.birth_date,
+            gender=data.gender,
+            locale=data.locale
+        )
 
     async def delete_user(self, user: User) -> None:
         await self.user_repo.delete(user)
