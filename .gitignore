@@ -5,6 +5,13 @@
 *.swo
 
 # OS
+*.DS_Store
 .DS_Store
+IOS/.DS_Store
+.DS_Store/
 Thumbs.db
+
+# Xcode
+xcuserdata/
+
 
