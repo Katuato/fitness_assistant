@@ -11,7 +11,7 @@ import SwiftUI
 extension Color {
     static let darkBackground = Color(red: 31/255, green: 31/255, blue: 31/255)
     static let customBackground = Color(hex: "1F1F1F")
-    
+    static let lightGrey = Color(hex: "6A6A71")
     // Инициализатор для hex цветов
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

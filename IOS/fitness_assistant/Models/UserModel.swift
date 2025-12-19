@@ -12,14 +12,16 @@ struct User: Codable, Identifiable {
     let email: String
     let passwordHash: String
     let name: String
-    let birthDate: String?
-    let height: String?
-    let weight: String?
-    let gender: String?
+    let birthDate: String
+    let height: String
+    let weight: String
+    let gender: String
     let createdAt: Date
     let lastLogin: Date?
     let role: UserRole
     let locale: String?
+    let level: String
+    let goal: String
     
 }
 

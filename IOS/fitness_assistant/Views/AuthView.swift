@@ -28,7 +28,7 @@ struct AuthView: View {
                            .multilineTextAlignment(.trailing)
                            .foregroundColor(.white)
                            .lineSpacing(0)
-                           .padding(.top, 95)
+                           .padding(.top, 47)
                            .padding(.trailing, 27)
                        }
                 .padding(.bottom, 205)
@@ -98,7 +98,7 @@ struct AuthView: View {
                                 .stroke(Color.white, lineWidth: 2)
                         )
                 .padding(.horizontal, 45)
-                .padding(.bottom,70)
+                .padding(.bottom,80)
             }
         }
         .sheet(isPresented: $showingCreateAccount) {
@@ -146,6 +146,13 @@ struct CustomTextField: View {
         .padding()
         .frame(width: 339, height: 81)
         .background(Color.white.opacity(0))
+        .background(
+            Image("custom_dropdown_menu_background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 339, height: 81)
+                .cornerRadius(24)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 24)
                 .stroke(Color.white, lineWidth: 2)

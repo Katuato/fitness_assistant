@@ -56,7 +56,9 @@ class ProfileViewModel: ObservableObject {
                 createdAt: Date(),
                 lastLogin: Date(),
                 role: .user,
-                locale: "en"
+                locale: "en",
+                level: "beginner",
+                goal: "weight loss"
             )
             
             self.friends = ProfileMockData.friends

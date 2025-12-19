@@ -20,11 +20,11 @@ struct CreateAccountView: View {
     @State private var selectedLevel: String = ""
     @State private var selectedGoal: String = ""
     
-    let genders = ["Male", "Female", "Other"]
+    let genders = ["male", "female", "other"]
     let heights = Array(140...220).map { "\($0) cm" }
     let weights = Array(40...150).map { "\($0) kg" }
-    let trainingLevels = ["Beginner", "Intermediate", "Advanced", "Professional"]
-    let goals = ["Weight Loss", "Muscle Gain", "Maintenance", "Endurance", "General Fitness"]
+    let trainingLevels = ["beginner", "intermediate", "advanced", "professional"]
+    let goals = ["weight loss", "muscle gain", "maintenance", "endurance", "general fitness"]
     
     var body: some View {
         NavigationView {
@@ -157,16 +157,31 @@ struct CustomDatePicker: View {
             
             Spacer()
             
-            DatePicker("", selection: $selection, displayedComponents: .date)
+            DatePicker("", selection: $selection, in: ...Date(), displayedComponents: .date)
                 .datePickerStyle(CompactDatePickerStyle())
                 .labelsHidden()
                 .colorScheme(.dark)
                 .accentColor(.white)
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(.white)
+
+                .background(Color.white.opacity(0))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.white, lineWidth: 1)
+                )
         }
         .foregroundColor(Color.white)
         .accentColor(Color.white)
         .font(.system(size: 24, weight: .bold))
         .padding()
+        .background(
+            Image("custom_dropdown_menu_background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 339, height: 81) 
+                .cornerRadius(24)
+        )
         .frame(width: 339, height: 81)
         .background(Color.white.opacity(0))
         .overlay(
@@ -181,67 +196,26 @@ struct CustomDropdownMenu: View {
     let placeholder: String
     let options: [String]
     let iconName: String
-    
-    @State private var isExpanded = false
+    @State private var showPicker = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(selectedValue.isEmpty ? placeholder : selectedValue)
-                    .foregroundColor(.white)
-                    .font(.system(size: 24, weight: .bold))
-                    .placeholder(when: selectedValue.isEmpty) {
-                        Text(placeholder)
-                            .foregroundColor(.white)
-                            .font(.system(size: 24, weight: .bold))
-                    }
-                
-                Spacer()
-                
-                Image(systemName: "chevron.down")
-                    .foregroundColor(.white)
-                    .font(.system(size: 16, weight: .bold))
-                    .rotationEffect(.degrees(isExpanded ? 180 : 0))
-            }
-            .padding()
-            .frame(width: 339, height: 81)
-            .background(Color.white.opacity(0))
-            .overlay(
-                RoundedRectangle(cornerRadius: 24)
-                    .stroke(Color.white, lineWidth: 2)
-            )
-            .onTapGesture {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                    isExpanded.toggle()
+            Button(action: {
+                showPicker.toggle()
+            }) {
+                HStack {
+                    Text(selectedValue.isEmpty ? placeholder : selectedValue)
+                        .foregroundColor(.white)
+                        .font(.system(size: 24, weight: .bold))
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.down")
+                        .foregroundColor(.white)
+                        .font(.system(size: 16, weight: .bold))
                 }
-            }
-            
-            if isExpanded {
-                VStack(spacing: 0) {
-                    ForEach(options, id: \.self) { option in
-                        Button(action: {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                selectedValue = option
-                                isExpanded = false
-                            }
-                        }) {
-                            HStack {
-                                Text(option)
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24, weight: .bold))
-                                Spacer()
-                            }
-                            .padding()
-                            .frame(height: 60)
-                            .background(Color.white.opacity(0))
-                        }
-                        
-                        if option != options.last {
-                            Divider()
-                                .background(Color.white.opacity(0.5))
-                        }
-                    }
-                }
+                .padding()
+                .frame(width: 339, height: 81)
                 .background(Color.white.opacity(0))
                 .overlay(
                     RoundedRectangle(cornerRadius: 24)
@@ -250,5 +224,87 @@ struct CustomDropdownMenu: View {
             }
         }
         .frame(width: 339)
+        .background(
+            Image("custom_dropdown_menu_background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 339, height: 81)
+                .cornerRadius(24)
+        )
+        .frame(width: 339, height: 81)
+        .sheet(isPresented: $showPicker) {
+            NativePickerView(
+                selectedValue: $selectedValue,
+                options: options,
+                showPicker: $showPicker
+            )
+            .presentationDetents([.height(250)])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(30)
+        }
+    }
+    
+    
+}
+struct NativePickerView: View {
+    @Binding var selectedValue: String
+    let options: [String]
+    @Binding var showPicker: Bool
+    
+    @State private var tempSelection: String
+    
+    init(selectedValue: Binding<String>, options: [String], showPicker: Binding<Bool>) {
+        self._selectedValue = selectedValue
+        self.options = options
+        self._showPicker = showPicker
+        let currentValue = selectedValue.wrappedValue
+        self._tempSelection = State(initialValue: currentValue.isEmpty && !options.isEmpty ? options[0] : currentValue)
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Button("Cancel") {
+                    showPicker = false
+                }
+                .foregroundColor(.white)
+                .font(.system(size: 17))
+                .padding(.leading, 20)
+
+                
+                Spacer()
+                
+                Button("Done") {
+                    selectedValue = tempSelection
+                    showPicker = false
+                }
+                .foregroundColor(.white)
+                .font(.system(size: 17, weight: .semibold))
+                .padding(.trailing, 20)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(Color(.systemGray6))
+
+            Picker("", selection: $tempSelection) {
+                ForEach(options, id: \.self) { option in
+                    Text(option)
+                        .tag(option)
+                        .font(.system(size: 22))
+                        .foregroundColor(.white)
+                }
+            }
+            .pickerStyle(WheelPickerStyle())
+            .labelsHidden()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemGray6))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6))
+        .presentationDetents([.height(350)])
+        .presentationDragIndicator(.hidden)
+        .presentationCornerRadius(0)
+        .interactiveDismissDisabled()
+        .colorScheme(.dark)
     }
 }
