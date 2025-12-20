@@ -7,8 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from fitness_assistant.db.base import Base
 
 if TYPE_CHECKING:
+    from fitness_assistant.models.exercise import UserEquipment
     from fitness_assistant.models.media import Media
     from fitness_assistant.models.session import Session
+    from fitness_assistant.models.workout_plan import UserDailyPlan
 
 
 class User(Base):
@@ -33,10 +35,13 @@ class User(Base):
     sessions: Mapped[list["Session"]] = relationship(back_populates="user")
     media_files: Mapped[list["Media"]] = relationship(back_populates="owner")
     measurements: Mapped[list["UserMeasurement"]] = relationship(back_populates="user")
+    equipment: Mapped[list["UserEquipment"]] = relationship(back_populates="user")
+
+    daily_plans: Mapped[list["UserDailyPlan"]] = relationship(back_populates="user")
 
 
 class UserMeasurement(Base):
-    __tablename__ = "user_mesurments"
+    __tablename__ = "user_measurements"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)

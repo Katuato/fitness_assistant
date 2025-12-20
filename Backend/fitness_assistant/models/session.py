@@ -20,6 +20,9 @@ class Session(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     end_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    accuracy: Mapped[int | None] = mapped_column(Integer)  
+    body_part: Mapped[str | None] = mapped_column(Text)  
+
     device_info: Mapped[dict | None] = mapped_column(JSONB)
     notes: Mapped[str | None] = mapped_column(Text)
 

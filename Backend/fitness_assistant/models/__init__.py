@@ -11,6 +11,7 @@ from fitness_assistant.models.exercise import (
 from fitness_assistant.models.media import Media
 from fitness_assistant.models.session import Session, SessionExerciseRun
 from fitness_assistant.models.user import User, UserMeasurement
+from fitness_assistant.models.workout_plan import PlanExercise, UserDailyPlan
 
 __all__ = [
     # User
@@ -32,4 +33,6 @@ __all__ = [
     # Analysis
     "AnalysisTask",
     "AnalysisResult",
+    "UserDailyPlan",
+    "PlanExercise",
 ]
