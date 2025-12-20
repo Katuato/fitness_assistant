@@ -34,6 +34,7 @@ struct ExerciseGridView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
+            .padding(.top, 4)
             .padding(.bottom, 16)
             
             // Exercises grid
