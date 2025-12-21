@@ -1,77 +1,15 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
-from fitness_assistant.schemas.base import PaginatedResponse, PaginationParams
 from fitness_assistant.schemas.exercise import (
-    EquipmentResponse,
+    IOSCategoryResponse,
+    CategorizedExerciseResponse,
     ExerciseMuscleResponse,
     ExerciseResponse,
-    MuscleResponse,
 )
 from fitness_assistant.web.deps import ExerciseSvc
 
 router = APIRouter()
 
-
-@router.get("", response_model=PaginatedResponse[ExerciseResponse])
-async def list_exercises(
-    exercise_service: ExerciseSvc,
-    params: PaginationParams = Query(),
-    category: str | None = Query(None),
-    level: str | None = Query(None),
-    muscle_id: int | None = Query(None),
-) -> PaginatedResponse[ExerciseResponse]:
-
-    exercises, total = await exercise_service.get_exercises(
-        page=params.page,
-        size=params.size,
-        category=category,
-        level=level,
-        muscle_id=muscle_id,
-    )
-
-    items = []
-    for ex in exercises:
-        muscles = [
-            ExerciseMuscleResponse.model_validate({
-                "muscle_id": em.muscle_id,
-                "muscle_name": em.muscle.name,
-                "role": em.role,
-            })
-            for em in ex.muscles
-        ]
-        items.append(
-            ExerciseResponse.model_validate({
-                "id": ex.id,
-                "name": ex.name,
-                "category": ex.category,
-                "equipment": ex.equipment,
-                "force": ex.force,
-                "level": ex.level,
-                "mechanic": ex.mechanic,
-                "instructions": ex.instructions,
-                "created_at": ex.created_at,
-                "muscles": muscles,
-                "images": [],
-            })
-        )
-
-    return PaginatedResponse[ExerciseResponse](
-        items=items, total=total, page=params.page, size=params.size
-    )
-
-
-@router.get("/muscles", response_model=list[MuscleResponse])
-async def list_muscles(exercise_service: ExerciseSvc) -> list[MuscleResponse]:
-
-    muscles = await exercise_service.get_all_muscles()
-    return [MuscleResponse.model_validate(m) for m in muscles]
-
-
-@router.get("/equipment", response_model=list[EquipmentResponse])
-async def list_equipment(exercise_service: ExerciseSvc) -> list[EquipmentResponse]:
-
-    equipment = await exercise_service.get_all_equipment()
-    return [EquipmentResponse.model_validate(e) for e in equipment]
 
 
 @router.get("/{exercise_id}", response_model=ExerciseResponse)
@@ -103,3 +41,22 @@ async def get_exercise(exercise_id: int, exercise_service: ExerciseSvc) -> Exerc
         "muscles": muscles,
         "images": [],
     })
+
+
+# Новые эндпоинты для iOS интеграции (AddExerciseView)
+
+@router.get("/ios/categories", response_model=list[IOSCategoryResponse])
+async def get_categories_for_ios(exercise_service: ExerciseSvc) -> list[IOSCategoryResponse]:
+    """Получить категории упражнений в формате iOS приложения."""
+    return await exercise_service.get_categories_for_ios()
+
+
+@router.get("/ios/categories/{category_name}/exercises", response_model=list[CategorizedExerciseResponse])
+async def get_exercises_by_category_for_ios(
+    category_name: str,
+    exercise_service: ExerciseSvc
+) -> list[CategorizedExerciseResponse]:
+    """Получить упражнения по категории в формате iOS приложения."""
+    return await exercise_service.get_exercises_by_category_for_ios(category_name)
+
+

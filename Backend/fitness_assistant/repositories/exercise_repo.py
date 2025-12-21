@@ -3,9 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from fitness_assistant.models.exercise import (
-    Equipment,
     Exercise,
-    ExerciseImage,
     ExerciseMuscle,
     Muscle,
 )
@@ -18,7 +16,6 @@ class ExerciseRepository:
         self.session = session
 
     async def get_by_id(self, exercise_id: int) -> Exercise | None:
-        """Get exercise by ID with relationships."""
         result = await self.session.execute(
             select(Exercise)
             .where(Exercise.id == exercise_id)
@@ -29,7 +26,7 @@ class ExerciseRepository:
         )
         return result.scalar_one_or_none()
 
-    async def get_list(
+    async def get_list_with_muscles(
         self,
         limit: int = 20,
         offset: int = 0,
@@ -37,7 +34,7 @@ class ExerciseRepository:
         level: str | None = None,
         muscle_id: int | None = None,
     ) -> list[Exercise]:
-        """Получить список упражнений с опциональными фильтрами."""
+        """Получить список упражнений с загрузкой связанных данных (muscles)."""
         query = select(Exercise).options(
             selectinload(Exercise.muscles).selectinload(ExerciseMuscle.muscle),
             selectinload(Exercise.images),
@@ -73,19 +70,12 @@ class ExerciseRepository:
         result = await self.session.execute(query)
         return result.scalar() or 0
 
-    async def get_all_muscles(self) -> list[Muscle]:
-
-        result = await self.session.execute(select(Muscle).order_by(Muscle.name))
-        return list(result.scalars().all())
-
-    async def get_all_equipment(self) -> list[Equipment]:
-
-        result = await self.session.execute(select(Equipment).order_by(Equipment.name))
-        return list(result.scalars().all())
-
-    async def get_exercise_images(self, exercise_id: int) -> list[ExerciseImage]:
-
+    async def get_categories(self) -> list[str]:
+        """Получить список уникальных категорий упражнений."""
         result = await self.session.execute(
-            select(ExerciseImage).where(ExerciseImage.exercise_id == exercise_id)
+            select(Exercise.category)
+            .where(Exercise.category.is_not(None))
+            .distinct()
+            .order_by(Exercise.category)
         )
-        return list(result.scalars().all())
+        return [row[0] for row in result.all()]
