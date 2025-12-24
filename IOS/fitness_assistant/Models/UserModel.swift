@@ -30,7 +30,7 @@ struct User: Codable, Identifiable {
     }
     
     var initials: String {
-        if let name = name, name.count >= 2 {
+        if name.count >= 2 {
             return String(name.prefix(2)).uppercased()
         }
         return "UN"

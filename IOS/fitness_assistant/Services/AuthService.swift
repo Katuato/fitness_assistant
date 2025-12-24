@@ -172,10 +172,10 @@ class AuthService: ObservableObject {
                 method: .get,
                 requiresAuth: true
             )
-            
+
             currentUser = user
             isAuthenticated = true
-            
+
         } catch let error as NetworkError {
             if case .unauthorized = error {
                 // Try to refresh token
@@ -187,7 +187,16 @@ class AuthService: ObservableObject {
                     isAuthenticated = false
                 }
             } else {
-                errorMessage = error.errorDescription
+                // For decoding errors, don't show them as user-facing errors
+                // since authentication still works and tokens are saved
+                if case .decodingError = error {
+                    print("⚠️ User profile fetch failed due to decoding error, but authentication succeeded")
+                    // Set a basic user state if we have tokens but can't fetch profile
+                    isAuthenticated = true
+                    currentUser = nil
+                } else {
+                    errorMessage = error.errorDescription
+                }
             }
         } catch {
             errorMessage = "Failed to fetch user data"

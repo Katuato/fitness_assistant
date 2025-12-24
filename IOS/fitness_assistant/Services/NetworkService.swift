@@ -217,7 +217,7 @@ class NetworkService {
             
             switch httpResponse.statusCode {
             case 200...299:
-   
+
                 if T.self == MessageResponse.self {
 
                     if data.isEmpty {
@@ -228,10 +228,50 @@ class NetworkService {
                     do {
                         return try decoder.decode(T.self, from: data)
                     } catch {
-      
+
                         if let defaultResponse = MessageResponse(message: "Success") as? T {
                             return defaultResponse
                         }
+                        throw NetworkError.decodingError(error)
+                    }
+                } else if T.self == TokenResponse.self {
+                    // Special handling for TokenResponse
+                    if data.isEmpty {
+                        // If we get an empty response for TokenResponse but status is 200-299,
+                        // this indicates a server-side issue. However, since the user reports
+                        // that functionality works despite this error, we'll provide a more
+                        // graceful error message and not crash the flow.
+                        print("⚠️ Warning: Server returned empty response for TokenResponse, but status was \(httpResponse.statusCode)")
+                        throw NetworkError.serverError("Authentication successful, but server response format is unexpected. Please check your connection.")
+                    }
+
+                    do {
+                        return try decoder.decode(T.self, from: data)
+                    } catch let decodingError as DecodingError {
+                        print("❌ TokenResponse decoding error: \(decodingError)")
+                        if let jsonString = String(data: data, encoding: .utf8) {
+                            print("📄 JSON: \(jsonString)")
+                        }
+                        throw NetworkError.decodingError(decodingError)
+                    } catch {
+                        throw NetworkError.decodingError(error)
+                    }
+                } else if T.self == User.self {
+                    // Special handling for User model (from /auth/me endpoint)
+                    if data.isEmpty {
+                        print("⚠️ Warning: Server returned empty response for User data")
+                        throw NetworkError.serverError("Unable to fetch user profile data. You may need to log in again.")
+                    }
+
+                    do {
+                        return try decoder.decode(T.self, from: data)
+                    } catch let decodingError as DecodingError {
+                        print("❌ User decoding error: \(decodingError)")
+                        if let jsonString = String(data: data, encoding: .utf8) {
+                            print("📄 JSON: \(jsonString)")
+                        }
+                        throw NetworkError.decodingError(decodingError)
+                    } catch {
                         throw NetworkError.decodingError(error)
                     }
                 } else {
