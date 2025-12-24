@@ -18,10 +18,9 @@ from fitness_assistant.schemas.base import (
     PaginationParams,
 )
 from fitness_assistant.schemas.exercise import (
-    EquipmentResponse,
-    ExerciseListResponse,
+    CategorizedExerciseResponse,
     ExerciseResponse,
-    MuscleResponse,
+    IOSCategoryResponse,
 )
 from fitness_assistant.schemas.media import (
     MediaCreate,
@@ -51,6 +50,21 @@ from fitness_assistant.schemas.user import (
     UserResponse,
     UserUpdate,
 )
+from fitness_assistant.schemas.stats import (
+    DayAccuracy,
+    RecentSessionResponse,
+    WeeklyStatsResponse,
+    WorkoutStatsResponse,
+)
+from fitness_assistant.schemas.workout_plan import (
+    PlanExerciseCreate,
+    PlanExerciseResponse,
+    PlanExerciseUpdate,
+    TodaysPlanExercise,
+    TodaysPlanResponse,
+    UserDailyPlanCreate,
+    UserDailyPlanResponse,
+)
 
 __all__ = [
     # Enums
@@ -76,9 +90,8 @@ __all__ = [
     "UserMeasurementResponse",
     # Exercise schemas
     "ExerciseResponse",
-    "ExerciseListResponse",
-    "MuscleResponse",
-    "EquipmentResponse",
+    "IOSCategoryResponse",
+    "CategorizedExerciseResponse",
     # Session schemas
     "SessionCreate",
     "SessionUpdate",
@@ -96,6 +109,18 @@ __all__ = [
     "AnalysisTaskResponse",
     "AnalysisResultResponse",
     "AnalysisTaskWithResultResponse",
+    # Workout Plan schemas
+    "PlanExerciseCreate",
+    "PlanExerciseUpdate",
+    "PlanExerciseResponse",
+    "UserDailyPlanCreate",
+    "UserDailyPlanResponse",
+    "TodaysPlanResponse",
+    "TodaysPlanExercise",
+    "WorkoutStatsResponse",
+    "WeeklyStatsResponse",
+    "DayAccuracy",
+    "RecentSessionResponse",
     # Common schemas
     "PaginationParams",
     "PaginatedResponse",

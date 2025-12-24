@@ -25,6 +25,9 @@ pytest-asyncio = "^0.24.0"
 ruff = "^0.8.0"
 mypy = "^1.13.0"
 httpx = "^0.28.0"
+sphinx = "^9.0.4"
+sphinx-rtd-theme = "^3.0.2"
+autodoc-pydantic = "^2.2.0"
 
 [build-system]
 requires = ["poetry-core"]
