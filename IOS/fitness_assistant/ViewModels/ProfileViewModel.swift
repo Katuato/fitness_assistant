@@ -57,12 +57,29 @@ class ProfileViewModel: ObservableObject {
     func loadMockData() {
         isLoading = true
         
-        // Simulate loading delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            
-            // Загружаем только вспомогательные данные (не user!)
-            self.friends = ProfileMockData.friends
+            // Simulate loading delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self else { return }
+
+                // Mock user data
+                self.user = User(
+                    id: 1,
+                    email: "user@example.com",
+                    passwordHash: "",
+                    name: "Username",
+                    birthDate: "1990-01-01",
+                    height: "180",
+                    weight: "75",
+                    gender: "male",
+                    createdAt: Date(),
+                    lastLogin: Date(),
+                    role: .user,
+                    locale: "en",
+                    level: "beginner",
+                    goal: "weight loss"
+                )
+
+                self.friends = ProfileMockData.friends
             self.equipment = ProfileMockData.equipment
             self.achievements = ProfileMockData.achievements
             self.stats = ProfileMockData.getStats()

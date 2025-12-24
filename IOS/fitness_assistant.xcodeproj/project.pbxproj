@@ -77,6 +77,7 @@
 		E90A2B6D2EDAC1FC0084BFF4 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */; };
 		E90A2B6F2EDACC570084BFF4 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */; };
 		E90A2B712EDACF070084BFF4 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */; };
+		E976B87B2EE8CAF7000885FD /* ChangeUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976B87A2EE8CAE7000885FD /* ChangeUserInfoViewModel.swift */; };
 		E9AA36AA2ED49C7D00CEF4ED /* fitness_assistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36A92ED49C7D00CEF4ED /* fitness_assistantTests.swift */; };
 		E9AA36B42ED49C7D00CEF4ED /* fitness_assistantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B32ED49C7D00CEF4ED /* fitness_assistantUITests.swift */; };
 		E9AA36B62ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA36B52ED49C7D00CEF4ED /* fitness_assistantUITestsLaunchTests.swift */; };
@@ -170,6 +171,7 @@
 		E90A2B6C2EDAC1FC0084BFF4 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		E90A2B6E2EDACC570084BFF4 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		E90A2B702EDACF070084BFF4 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
+		E976B87A2EE8CAE7000885FD /* ChangeUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeUserInfoViewModel.swift; sourceTree = "<group>"; };
 		E9AA36952ED49C7C00CEF4ED /* fitness_assistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fitness_assistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9AA36A52ED49C7D00CEF4ED /* fitness_assistantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fitness_assistantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9AA36A92ED49C7D00CEF4ED /* fitness_assistantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fitness_assistantTests.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		77CA00E62ED837DD007C7C6E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E976B87A2EE8CAE7000885FD /* ChangeUserInfoViewModel.swift */,
 				771591492EDA2662005F1B58 /* AnalysisViewModel.swift */,
 				77D2B55D2EE20EF500183DF4 /* AddExerciseViewModel.swift */,
 				779422B32EDA194B00E3EDDF /* ProfileViewModel.swift */,
@@ -549,6 +552,7 @@
 				BA78A4E62EEF86710037C665 /* KeychainService.swift in Sources */,
 				BA78A4FA2EF4CBA40037C665 /* MediaModel.swift in Sources */,
 				779422B42EDA194B00E3EDDF /* ProfileViewModel.swift in Sources */,
+				E976B87B2EE8CAF7000885FD /* ChangeUserInfoViewModel.swift in Sources */,
 				77CA00F12ED837DD007C7C6E /* fitness_assistantApp.swift in Sources */,
 				7764C3632ED848CB005C4C92 /* WeeklyStats.swift in Sources */,
 				7764C3712ED84BDD005C4C92 /* DashboardViewModel.swift in Sources */,

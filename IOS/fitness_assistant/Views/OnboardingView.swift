@@ -29,7 +29,7 @@ struct OnboardingView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .lineSpacing(0)
-                        .padding(.bottom,80)
+                        .padding(.bottom,60)
                     
                     if pages[currentPage].pageImage != "" {
                         Image(pages[currentPage].pageImage)
@@ -75,7 +75,7 @@ struct OnboardingView: View {
                                     .stroke(Color.white, lineWidth: 2)
                             )
                     .padding(.horizontal, 45)
-                    .padding(.bottom,70)
+                    .padding(.bottom,80)
                     
                 } else {
                     Button("NEXT") {
@@ -90,7 +90,7 @@ struct OnboardingView: View {
                             .stroke(Color.white, lineWidth: 2)
                     )
                     .padding(.horizontal, 45)
-                    .padding(.bottom, !isFirstPage ? 10 : 70)
+                    .padding(.bottom, !isFirstPage ? 10 : 80)
 
                 }
                 
@@ -101,7 +101,7 @@ struct OnboardingView: View {
                     .font(.system(size: 24, weight: .bold))
                     .background(Color.white.opacity(0))
                     .foregroundColor(Color.white)
-                    .padding(.bottom,  37)
+                    .padding(.bottom,  60)
                 }
                }
                .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -109,11 +109,11 @@ struct OnboardingView: View {
        }
     private var topPaddingForCurrentPage: CGFloat {
         if currentPage == 0 {
-            return 404
+            return 356
         } else if currentPage == pages.count - 1 {
-            return 446
+            return 398
         } else {
-            return 147
+            return 99
         }
     }
     

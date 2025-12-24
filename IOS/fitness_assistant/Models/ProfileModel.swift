@@ -13,14 +13,38 @@ struct Friend: Identifiable, Codable {
     let name: String
     let avatarInitials: String
     let isOnline: Bool
+    let username: String
+    let isRequestPending: Bool
+    let mutualFriends: Int
+    let streak: Int
+    let accuracy: Int
+    let isVerified: Bool
     
-    init(id: UUID = UUID(), name: String, avatarInitials: String, isOnline: Bool = false) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        avatarInitials: String,
+        isOnline: Bool = false,
+        username: String,
+        isRequestPending: Bool = false,
+        mutualFriends: Int,
+        streak: Int,
+        accuracy: Int,
+        isVerified: Bool
+    ) {
         self.id = id
         self.name = name
         self.avatarInitials = avatarInitials
         self.isOnline = isOnline
+        self.username = username
+        self.isRequestPending = isRequestPending
+        self.mutualFriends = mutualFriends
+        self.streak = streak
+        self.accuracy = accuracy
+        self.isVerified = isVerified
     }
 }
+
 
 // MARK: - Equipment Model
 struct Equipment: Identifiable, Codable {
@@ -74,14 +98,119 @@ struct ProfileStats {
 // MARK: - Mock Data
 class ProfileMockData {
     static let friends: [Friend] = [
-        Friend(name: "Alex Johnson", avatarInitials: "AJ", isOnline: true),
-        Friend(name: "Maria Garcia", avatarInitials: "MG", isOnline: false),
-        Friend(name: "John Smith", avatarInitials: "JS", isOnline: true),
-        Friend(name: "Emma Wilson", avatarInitials: "EW", isOnline: false),
-        Friend(name: "Michael Brown", avatarInitials: "MB", isOnline: true),
-        Friend(name: "Sarah Davis", avatarInitials: "SD", isOnline: false),
-        Friend(name: "Chris Lee", avatarInitials: "CL", isOnline: true),
-        Friend(name: "Ashley Martinez", avatarInitials: "AM", isOnline: false)
+        Friend(
+                    name: "Mike Johnson",
+                    avatarInitials: "MJ",
+                    isOnline: true,
+                    username: "@mikeeeee",
+                    isRequestPending: true,
+                    mutualFriends: 3,
+                    streak: 0,
+                    accuracy: 0,
+                    isVerified: false
+                ),
+                Friend(
+                    name: "Sarah Davis",
+                    avatarInitials: "SD",
+                    isOnline: false,
+                    username: "@sarahd",
+                    isRequestPending: true,
+                    mutualFriends: 2,
+                    streak: 0,
+                    accuracy: 0,
+                    isVerified: true
+                ),
+                
+                // Мои друзья
+                Friend(
+                    name: "Ekaterina Kalmykova",
+                    avatarInitials: "EK",
+                    isOnline: true,
+                    username: "@katuato",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 45,
+                    accuracy: 80,
+                    isVerified: true
+                ),
+                Friend(
+                    name: "Alex Johnson",
+                    avatarInitials: "AJ",
+                    isOnline: true,
+                    username: "@alexj",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 30,
+                    accuracy: 92,
+                    isVerified: true
+                ),
+                Friend(
+                    name: "Maria Garcia",
+                    avatarInitials: "MG",
+                    isOnline: false,
+                    username: "@mariag",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 15,
+                    accuracy: 75,
+                    isVerified: false
+                ),
+                Friend(
+                    name: "John Smith",
+                    avatarInitials: "JS",
+                    isOnline: true,
+                    username: "@johns",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 7,
+                    accuracy: 85,
+                    isVerified: false
+                ),
+                Friend(
+                    name: "Emma Wilson",
+                    avatarInitials: "EW",
+                    isOnline: false,
+                    username: "@emmaw",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 22,
+                    accuracy: 88,
+                    isVerified: true
+                ),
+                Friend(
+                    name: "Michael Brown",
+                    avatarInitials: "MB",
+                    isOnline: true,
+                    username: "@mikeb",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 3,
+                    accuracy: 70,
+                    isVerified: false
+                ),
+                Friend(
+                    name: "Chris Lee",
+                    avatarInitials: "CL",
+                    isOnline: true,
+                    username: "@chrisl",
+                    isRequestPending: false,
+                    mutualFriends: 0,
+                    streak: 60,
+                    accuracy: 95,
+                    isVerified: true
+                ),
+                Friend(
+                    name: "Ashley Martinez",
+                    avatarInitials: "AM",
+                    isOnline: false,
+                    username: "@ashleym",
+                    isRequestPending: false,
+                    mutualFriends: 1,
+                    streak: 18,
+                    accuracy: 78,
+                    isVerified: false
+                )
+            
     ]
     
     static let equipment: [Equipment] = [
