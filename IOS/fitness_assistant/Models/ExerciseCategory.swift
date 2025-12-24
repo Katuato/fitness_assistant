@@ -8,6 +8,67 @@
 import Foundation
 import SwiftUI
 
+// MARK: - Backend API Response Models
+
+struct IOSCategoryResponse: Codable, Identifiable {
+    let id: String
+    let name: String
+    let icon: String
+    let color: String
+
+    func toExerciseCategory() -> ExerciseCategory {
+        // Convert hex color to SwiftUI Color
+        let color = Color(hex: self.color) ?? .blue
+
+        // Use SF Symbol name directly with fallback
+        let icon = self.icon
+
+        return ExerciseCategory(name: name, icon: icon, color: color)
+    }
+}
+
+struct CategorizedExerciseResponse: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let category: String
+    let targetMuscles: [String]
+    let description: String?
+    let instructions: [String]
+    let sets: Int?
+    let reps: Int?
+    let difficulty: String?
+    let estimatedDuration: Int?
+    let caloriesBurn: Int?
+    let imageURL: String?
+
+    func toCategorizedExercise() -> CategorizedExercise {
+        let categoryEnum = ExerciseCategory.allCategories.first { $0.name == category } ?? .biceps
+
+        let difficultyLevel: ExercisePreviewData.DifficultyLevel
+        switch difficulty?.lowercased() {
+        case "beginner": difficultyLevel = .beginner
+        case "intermediate": difficultyLevel = .intermediate
+        case "advanced": difficultyLevel = .advanced
+        default: difficultyLevel = .beginner
+        }
+
+        return CategorizedExercise(
+            exerciseId: id, // Preserve backend ID
+            name: name,
+            category: categoryEnum,
+            targetMuscles: targetMuscles,
+            description: description ?? "",
+            instructions: instructions,
+            sets: sets ?? 3,
+            reps: reps ?? 12,
+            difficulty: difficultyLevel,
+            estimatedDuration: estimatedDuration ?? 0,
+            caloriesBurn: caloriesBurn ?? 0,
+            imageURL: imageURL
+        )
+    }
+}
+
 // MARK: - Exercise Category
 
 struct ExerciseCategory: Identifiable, Hashable {
@@ -30,6 +91,7 @@ struct ExerciseCategory: Identifiable, Hashable {
 
 struct CategorizedExercise: Identifiable {
     let id = UUID()
+    let exerciseId: Int? // Backend exercise ID
     let name: String
     let category: ExerciseCategory
     let targetMuscles: [String]
@@ -123,7 +185,8 @@ extension ExerciseCategory {
 extension CategorizedExercise {
     // MARK: - Biceps Exercises
     static let bicepCurl = CategorizedExercise(
-        name: "Bicep Curl",
+        exerciseId: nil, // Mock data
+        name: "Bicep Curls",
         category: .biceps,
         targetMuscles: ["Biceps", "Forearms"],
         description: "Classic isolation exercise for building bigger, stronger biceps. Perfect for developing arm strength and definition.",
@@ -143,6 +206,7 @@ extension CategorizedExercise {
     )
     
     static let hammerCurl = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Hammer Curl",
         category: .biceps,
         targetMuscles: ["Biceps", "Brachialis", "Forearms"],
@@ -163,6 +227,7 @@ extension CategorizedExercise {
     )
     
     static let concentrationCurl = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Concentration Curl",
         category: .biceps,
         targetMuscles: ["Biceps Peak"],
@@ -183,6 +248,7 @@ extension CategorizedExercise {
     )
     
     static let preacherCurl = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Preacher Curl",
         category: .biceps,
         targetMuscles: ["Biceps", "Brachialis"],
@@ -204,6 +270,7 @@ extension CategorizedExercise {
     
     // MARK: - Chest Exercises
     static let benchPress = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Bench Press",
         category: .chest,
         targetMuscles: ["Chest", "Triceps", "Shoulders"],
@@ -224,6 +291,7 @@ extension CategorizedExercise {
     )
     
     static let pushUps = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Push-Ups",
         category: .chest,
         targetMuscles: ["Chest", "Triceps", "Core"],
@@ -244,6 +312,7 @@ extension CategorizedExercise {
     )
     
     static let inclineBench = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Incline Bench Press",
         category: .chest,
         targetMuscles: ["Upper Chest", "Shoulders", "Triceps"],
@@ -264,6 +333,7 @@ extension CategorizedExercise {
     )
     
     static let dumbbellFlyes = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Dumbbell Flyes",
         category: .chest,
         targetMuscles: ["Chest", "Front Shoulders"],
@@ -285,6 +355,7 @@ extension CategorizedExercise {
     
     // MARK: - Legs Exercises
     static let squats = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Squats",
         category: .legs,
         targetMuscles: ["Quadriceps", "Glutes", "Hamstrings", "Core"],
@@ -305,6 +376,7 @@ extension CategorizedExercise {
     )
     
     static let lunges = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Lunges",
         category: .legs,
         targetMuscles: ["Quadriceps", "Glutes", "Hamstrings"],
@@ -325,6 +397,7 @@ extension CategorizedExercise {
     )
     
     static let legPress = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Leg Press",
         category: .legs,
         targetMuscles: ["Quadriceps", "Glutes", "Hamstrings"],
@@ -345,6 +418,7 @@ extension CategorizedExercise {
     )
     
     static let calfRaises = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Calf Raises",
         category: .legs,
         targetMuscles: ["Calves", "Gastrocnemius"],
@@ -366,6 +440,7 @@ extension CategorizedExercise {
     
     // MARK: - Back Exercises
     static let deadlifts = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Deadlifts",
         category: .back,
         targetMuscles: ["Back", "Hamstrings", "Glutes", "Core"],
@@ -386,6 +461,7 @@ extension CategorizedExercise {
     )
     
     static let pullUps = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Pull-Ups",
         category: .back,
         targetMuscles: ["Lats", "Biceps", "Upper Back"],
@@ -406,6 +482,7 @@ extension CategorizedExercise {
     )
     
     static let bentOverRow = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Bent Over Row",
         category: .back,
         targetMuscles: ["Middle Back", "Lats", "Rhomboids"],
@@ -426,6 +503,7 @@ extension CategorizedExercise {
     )
     
     static let latPulldown = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Lat Pulldown",
         category: .back,
         targetMuscles: ["Lats", "Biceps", "Upper Back"],
@@ -447,6 +525,7 @@ extension CategorizedExercise {
     
     // MARK: - Shoulders Exercises
     static let shoulderPress = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Shoulder Press",
         category: .shoulders,
         targetMuscles: ["Shoulders", "Triceps", "Upper Chest"],
@@ -467,6 +546,7 @@ extension CategorizedExercise {
     )
     
     static let lateralRaises = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Lateral Raises",
         category: .shoulders,
         targetMuscles: ["Side Delts", "Shoulders"],
@@ -487,6 +567,7 @@ extension CategorizedExercise {
     )
     
     static let frontRaises = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Front Raises",
         category: .shoulders,
         targetMuscles: ["Front Delts", "Shoulders"],
@@ -507,6 +588,7 @@ extension CategorizedExercise {
     )
     
     static let rearDeltFlyes = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Rear Delt Flyes",
         category: .shoulders,
         targetMuscles: ["Rear Delts", "Upper Back"],
@@ -528,6 +610,7 @@ extension CategorizedExercise {
     
     // MARK: - Core Exercises
     static let plank = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Plank",
         category: .core,
         targetMuscles: ["Core", "Abs", "Lower Back"],
@@ -548,6 +631,7 @@ extension CategorizedExercise {
     )
     
     static let crunches = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Crunches",
         category: .core,
         targetMuscles: ["Upper Abs", "Core"],
@@ -568,6 +652,7 @@ extension CategorizedExercise {
     )
     
     static let russianTwists = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Russian Twists",
         category: .core,
         targetMuscles: ["Obliques", "Core", "Abs"],
@@ -588,6 +673,7 @@ extension CategorizedExercise {
     )
     
     static let legRaises = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Leg Raises",
         category: .core,
         targetMuscles: ["Lower Abs", "Hip Flexors"],
@@ -609,6 +695,7 @@ extension CategorizedExercise {
     
     // MARK: - Full Body Exercises
     static let burpees = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Burpees",
         category: .fullBody,
         targetMuscles: ["Full Body", "Cardio", "Core"],
@@ -629,6 +716,7 @@ extension CategorizedExercise {
     )
     
     static let mountainClimbers = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Mountain Climbers",
         category: .fullBody,
         targetMuscles: ["Core", "Shoulders", "Cardio"],
@@ -649,6 +737,7 @@ extension CategorizedExercise {
     )
     
     static let jumpingJacks = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Jumping Jacks",
         category: .fullBody,
         targetMuscles: ["Full Body", "Cardio"],
@@ -669,6 +758,7 @@ extension CategorizedExercise {
     )
     
     static let kettlebellSwings = CategorizedExercise(
+        exerciseId: nil, // Mock data
         name: "Kettlebell Swings",
         category: .fullBody,
         targetMuscles: ["Glutes", "Hamstrings", "Core", "Shoulders"],

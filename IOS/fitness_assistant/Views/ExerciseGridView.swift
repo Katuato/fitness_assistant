@@ -176,7 +176,7 @@ struct ExerciseGridCard: View {
             viewModel: {
                 let vm = AddExerciseViewModel()
                 vm.selectedCategory = .biceps
-                vm.exercises = CategorizedExercise.exercisesByCategory(.biceps)
+                vm.exercises = CategorizedExercise.exercisesByCategory(ExerciseCategory.biceps)
                 vm.navigationState = .exerciseGrid
                 return vm
             }(),

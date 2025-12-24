@@ -7,6 +7,63 @@
 
 import Foundation
 
+// MARK: - Extended Exercise Response (from API)
+
+struct ExerciseDetailResponse: Codable {
+    let id: Int
+    let name: String
+    let category: String?
+    let description: String?
+    let difficulty: String?
+    let estimatedDuration: Int?
+    let caloriesBurn: Int?
+    let defaultSets: Int?
+    let defaultReps: Int?
+    let imageUrl: String?
+    let instructions: [String]?  // Преобразуем из JSONB
+    let muscles: [ExerciseMuscleResponse]
+}
+
+struct ExerciseMuscleResponse: Codable {
+    let muscleId: Int
+    let muscleName: String
+    let role: String  // "primary" or "secondary"
+}
+
+// Адаптер для ExercisePreviewData
+extension ExercisePreviewData {
+    init(from response: ExerciseDetailResponse) {
+        let difficultyLevel: DifficultyLevel
+        switch response.difficulty?.lowercased() {
+        case "beginner":
+            difficultyLevel = .beginner
+        case "advanced":
+            difficultyLevel = .advanced
+        default:
+            difficultyLevel = .intermediate
+        }
+
+        self.init(
+            id: UUID(),
+            exercise: Exercise(
+                name: response.name,
+                sets: response.defaultSets ?? 3,
+                reps: response.defaultReps ?? 12,
+                accuracy: nil,
+                isCompleted: false
+            ),
+            targetMuscles: response.muscles.map { $0.muscleName },
+            description: response.description ?? "",
+            instructions: response.instructions ?? [],
+            videoThumbnailURL: response.imageUrl,
+            videoURL: nil,
+            difficulty: difficultyLevel,
+            estimatedDuration: response.estimatedDuration ?? 10,
+            caloriesBurn: response.caloriesBurn ?? 50
+        )
+    }
+}
+
 /// Extended exercise information for preview display
 struct ExercisePreviewData: Identifiable {
     let id: UUID

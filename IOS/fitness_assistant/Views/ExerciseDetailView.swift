@@ -272,7 +272,7 @@ struct ExerciseDetailView: View {
             viewModel: {
                 let vm = AddExerciseViewModel()
                 vm.selectedCategory = .biceps
-                vm.selectedExercise = .bicepCurl
+                vm.selectedExercise = CategorizedExercise.bicepCurl
                 vm.navigationState = .exerciseDetail
                 return vm
             }(),

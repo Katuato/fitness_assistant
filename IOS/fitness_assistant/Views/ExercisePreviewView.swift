@@ -8,9 +8,30 @@
 import SwiftUI
 
 struct ExercisePreviewView: View {
-    let exercise: Exercise
+    let exercise: Exercise?
+    let planExercise: TodaysPlanExercise?
     let onDismiss: () -> Void
     let onStartTracking: () -> Void
+    let onRemove: (() -> Void)?
+    let onToggleComplete: (() -> Void)?
+
+    init(exercise: Exercise, onDismiss: @escaping () -> Void, onStartTracking: @escaping () -> Void) {
+        self.exercise = exercise
+        self.planExercise = nil
+        self.onDismiss = onDismiss
+        self.onStartTracking = onStartTracking
+        self.onRemove = nil
+        self.onToggleComplete = nil
+    }
+
+    init(planExercise: TodaysPlanExercise, onDismiss: @escaping () -> Void, onStartTracking: @escaping () -> Void, onRemove: (() -> Void)? = nil, onToggleComplete: (() -> Void)? = nil) {
+        self.exercise = nil
+        self.planExercise = planExercise
+        self.onDismiss = onDismiss
+        self.onStartTracking = onStartTracking
+        self.onRemove = onRemove
+        self.onToggleComplete = onToggleComplete
+    }
     
     @StateObject private var viewModel = ExercisePreviewViewModel()
     @State private var dragOffset: CGFloat = 0
@@ -101,8 +122,13 @@ struct ExercisePreviewView: View {
             }
         }
         .task {
-            await viewModel.loadExercisePreview(for: exercise)
-            viewModel.trackPreviewViewed(exerciseId: exercise.id)
+            if let planExercise = planExercise {
+                await viewModel.loadExercisePreview(for: planExercise)
+                viewModel.trackPreviewViewed(exerciseId: UUID()) // dummy UUID for now
+            } else if let exercise = exercise {
+                await viewModel.loadExercisePreview(for: exercise)
+                viewModel.trackPreviewViewed(exerciseId: exercise.id)
+            }
         }
     }
     
@@ -174,7 +200,7 @@ struct ExercisePreviewView: View {
     private func headerSection() -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
-                Text(exercise.name)
+                Text(planExercise?.name ?? exercise?.name ?? "Unknown Exercise")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(.white)
                 
@@ -196,16 +222,58 @@ struct ExercisePreviewView: View {
             }
             
             Spacer()
-            
-            Button(action: dismissWithAnimation) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white.opacity(0.6))
-                    .frame(width: 32, height: 32)
-                    .background(
-                        Circle()
-                            .fill(Color.white.opacity(0.1))
-                    )
+
+            // Action buttons for plan exercises
+            if planExercise != nil {
+                HStack(spacing: 12) {
+                    if let onToggleComplete = onToggleComplete {
+                        Button(action: onToggleComplete) {
+                            Image(systemName: planExercise?.isCompleted == true ? "checkmark.circle.fill" : "checkmark.circle")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(planExercise?.isCompleted == true ? accentGreen : .white.opacity(0.6))
+                                .frame(width: 32, height: 32)
+                                .background(
+                                    Circle()
+                                        .fill(planExercise?.isCompleted == true ? accentGreen.opacity(0.2) : Color.white.opacity(0.1))
+                                )
+                        }
+                    }
+
+                    if let onRemove = onRemove {
+                        Button(action: onRemove) {
+                            Image(systemName: "trash")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.red.opacity(0.8))
+                                .frame(width: 32, height: 32)
+                                .background(
+                                    Circle()
+                                        .fill(Color.red.opacity(0.1))
+                                )
+                        }
+                    }
+
+                    Button(action: dismissWithAnimation) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.6))
+                            .frame(width: 32, height: 32)
+                            .background(
+                                Circle()
+                                    .fill(Color.white.opacity(0.1))
+                            )
+                    }
+                }
+            } else {
+                Button(action: dismissWithAnimation) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white.opacity(0.6))
+                        .frame(width: 32, height: 32)
+                        .background(
+                            Circle()
+                                .fill(Color.white.opacity(0.1))
+                        )
+                }
             }
         }
     }
@@ -381,7 +449,7 @@ struct ExercisePreviewView: View {
     }
     
     private func handleStartTracking() {
-        viewModel.trackStartAITracking(exerciseId: exercise.id)
+        viewModel.trackStartAITracking(exerciseId: exercise?.id ?? UUID())
         
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
             isPresented = false

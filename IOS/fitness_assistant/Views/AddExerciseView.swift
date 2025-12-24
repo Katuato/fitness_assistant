@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddExerciseView: View {
     let onDismiss: () -> Void
-    let onExerciseAdded: (Exercise) -> Void
+    let onExerciseAdded: (CategorizedExercise) -> Void
     
     @StateObject private var viewModel = AddExerciseViewModel()
     @State private var dragOffset: CGFloat = 0
@@ -200,16 +200,14 @@ struct AddExerciseView: View {
     }
     
     private func handleAddExercise(_ categorizedExercise: CategorizedExercise) {
-        viewModel.trackExerciseAdded(exerciseId: categorizedExercise.id)
-        
-        let exercise = categorizedExercise.toExercise()
-        
+        viewModel.trackExerciseAdded(exercise: categorizedExercise)
+
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
             isPresented = false
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            onExerciseAdded(exercise)
+            onExerciseAdded(categorizedExercise)
             viewModel.reset()
             onDismiss()
         }

@@ -180,107 +180,23 @@ struct ShimmerPlanHeaderSkeleton: View {
     }
 }
 
-// MARK: - Complete Loading Skeleton
-
-struct HomeViewLoadingSkeleton: View {
-    private var brandPurple: Color {
-        Color(red: 0x73/255, green: 0x71/255, blue: 0xDF/255)
-    }
-    
-    private var brandOrange: Color {
-        Color(red: 0xE4/255, green: 0x7E/255, blue: 0x18/255)
-    }
-    
-    private var accentGreen: Color {
-        Color(red: 0x39/255, green: 0xD9/255, blue: 0x63/255)
-    }
-    
-    @State private var gradientRotation: Double = 0
-    
-    var body: some View {
-        ZStack {
-            // Animated background
-            ZStack {
-                Image("page_background")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                
-                Color.black.opacity(0.2)
-                    .ignoresSafeArea()
-            }
-            
-            VStack(alignment: .leading, spacing: 0) {
-                // Header skeleton
-                ShimmerHeaderSkeleton()
-                    .padding(.horizontal, 20)
-                    .padding(.top, 60)
-                    .padding(.bottom, 24)
-                
-                // Stats section skeleton
-                HStack(spacing: 12) {
-                    ShimmerStatCardSkeleton()
-                    ShimmerStatCardSkeleton()
-                    ShimmerStatCardSkeleton()
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 28)
-                
-                // Today's Plan section
-                VStack(alignment: .leading, spacing: 0) {
-                    ShimmerPlanHeaderSkeleton()
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
-                    
-                    // Scrollable exercises list skeleton
-                    ScrollView(showsIndicators: false) {
-                        LazyVStack(spacing: 12) {
-                            ForEach(0..<4, id: \.self) { index in
-                                ShimmerExerciseCardSkeleton()
-                                    .opacity(1.0 - (Double(index) * 0.1))
-                            }
-                            
-                            // Add exercise button skeleton
-                            HStack(spacing: 10) {
-                                Circle()
-                                    .fill(Color.white.opacity(0.04))
-                                    .frame(width: 28, height: 28)
-                                
-                                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                    .fill(Color.white.opacity(0.06))
-                                    .frame(width: 110, height: 16)
-                                
-                                Spacer()
-                                
-                                Circle()
-                                    .fill(Color.white.opacity(0.04))
-                                    .frame(width: 16, height: 16)
-                            }
-                            .padding(.horizontal, 18)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                    .fill(Color.white.opacity(0.02))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                                    )
-                            )
-                            .opacity(0.6)
-                            
-                            Color.clear.frame(height: 20)
-                        }
-                        .padding(.horizontal, 20)
-                    }
-                }
-                
-                Spacer(minLength: 0)
-            }
-        }
-    }
-}
+// MARK: - Preview
 
 #Preview {
-    HomeViewLoadingSkeleton()
-        .preferredColorScheme(.dark)
+    VStack(spacing: 20) {
+        ShimmerHeaderSkeleton()
+        
+        HStack(spacing: 12) {
+            ShimmerStatCardSkeleton()
+            ShimmerStatCardSkeleton()
+            ShimmerStatCardSkeleton()
+        }
+        
+        ShimmerPlanHeaderSkeleton()
+        
+        ShimmerExerciseCardSkeleton()
+    }
+    .padding()
+    .background(Color.black)
+    .preferredColorScheme(.dark)
 }

@@ -42,24 +42,25 @@ class AddExerciseViewModel: ObservableObject {
     
     // MARK: - Public Methods
     
-    /// Load categories - placeholder for backend integration
+    /// Load categories from backend
     func loadCategories() {
         isLoading = true
         errorMessage = nil
-        
-        // Simulate async loading
+
         Task {
-            try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
-            
-            // TODO: Replace with actual backend call
-            // let categories = try await exerciseService.fetchCategories()
-            
-            categories = ExerciseCategory.allCategories
-            isLoading = false
+            do {
+                let categoryResponses = try await NetworkService.shared.getExerciseCategories()
+                categories = categoryResponses.map { $0.toExerciseCategory() }
+                isLoading = false
+            } catch {
+                errorMessage = "Failed to load categories: \(error.localizedDescription)"
+                isLoading = false
+                print("❌ Error loading categories: \(error)")
+            }
         }
     }
     
-    /// Load exercises for selected category
+    /// Load exercises for selected category from backend
     func loadExercises(for category: ExerciseCategory) async {
         // Set everything immediately for instant navigation
         selectedCategory = category
@@ -67,15 +68,17 @@ class AddExerciseViewModel: ObservableObject {
         navigationState = .exerciseGrid
         isLoading = true
         errorMessage = nil
-        
-        // Load data in background (user already sees the new screen)
-        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
-        
-        // TODO: Replace with actual backend call
-        // let exercises = try await exerciseService.fetchExercises(categoryId: category.id)
-        
-        exercises = CategorizedExercise.exercisesByCategory(category)
-        isLoading = false
+
+        // Load data from backend (user already sees the new screen)
+        do {
+            let exerciseResponses = try await NetworkService.shared.getExercisesByCategory(categoryName: category.name)
+            exercises = exerciseResponses.map { $0.toCategorizedExercise() }
+            isLoading = false
+        } catch {
+            errorMessage = "Failed to load exercises: \(error.localizedDescription)"
+            isLoading = false
+            print("❌ Error loading exercises: \(error)")
+        }
     }
     
     /// Select exercise and navigate to detail
@@ -117,9 +120,8 @@ class AddExerciseViewModel: ObservableObject {
         print("📊 Exercise viewed: \(exerciseId)")
     }
     
-    func trackExerciseAdded(exerciseId: UUID) {
-        // TODO: Implement analytics tracking
-        print("✅ Exercise added to plan: \(exerciseId)")
+    func trackExerciseAdded(exercise: CategorizedExercise) {
+        print("📊 Exercise viewed: \(exercise.id)")
     }
 }
 

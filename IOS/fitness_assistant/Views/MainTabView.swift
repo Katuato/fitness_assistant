@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject private var workoutService = WorkoutService()
+    @StateObject private var homeViewModel = HomeViewModel()
     @EnvironmentObject var onboardingService: OnboardingService
     @EnvironmentObject var authService: AuthService
     @State private var selectedTab = 0
     @State private var shouldNavigateToAnalysis = false
-    @State private var selectedExerciseForPreview: Exercise?
+    @State private var selectedPlanExerciseForPreview: TodaysPlanExercise?
     @State private var showAddExercise = false
     
     init() {
@@ -47,6 +47,7 @@ struct MainTabView: View {
     }
     
     var body: some View {
+        NavigationStack {
         ZStack {
             // Main Tab View
             TabView(selection: $selectedTab) {
@@ -55,10 +56,10 @@ struct MainTabView: View {
                     Color.customBackground.ignoresSafeArea()
                     HomeView(
                         navigateToAnalysis: $shouldNavigateToAnalysis,
-                        selectedExerciseForPreview: $selectedExerciseForPreview,
+                        selectedPlanExerciseForPreview: $selectedPlanExerciseForPreview,
                         showAddExercise: $showAddExercise
                     )
-                    .environmentObject(workoutService)
+                    .environmentObject(homeViewModel)
                 }
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "circle.grid.3x3.fill" : "circle.grid.3x3")
@@ -68,7 +69,10 @@ struct MainTabView: View {
                 // TAB 1 — Analysis
                 ZStack {
                     Color.customBackground.ignoresSafeArea()
-                    AnalysisView()
+                    AnalysisView(onExerciseCompleted: {
+                        selectedTab = 0 // Return to Home tab
+                    })
+                        .environmentObject(homeViewModel)
                 }
                 .tabItem {
                     Image(systemName: selectedTab == 1 ? "video.fill" : "video")
@@ -100,7 +104,7 @@ struct MainTabView: View {
             .tint(.orange)
             .toolbarBackground(.hidden, for: .tabBar)
             .background(Color.customBackground.ignoresSafeArea())
-            .blur(radius: selectedExerciseForPreview != nil || showAddExercise ? 10 : 0)
+            .blur(radius: selectedPlanExerciseForPreview != nil || showAddExercise ? 10 : 0)
             .onChange(of: shouldNavigateToAnalysis) { oldValue, newValue in
                 if newValue {
                     selectedTab = 1
@@ -109,15 +113,30 @@ struct MainTabView: View {
             }
             
             // Exercise Preview Overlay - Covers EVERYTHING including tab bar
-            if let exercise = selectedExerciseForPreview {
+            if let planExercise = selectedPlanExerciseForPreview {
                 ExercisePreviewView(
-                    exercise: exercise,
+                    planExercise: planExercise,
                     onDismiss: {
-                        selectedExerciseForPreview = nil
+                        selectedPlanExerciseForPreview = nil
                     },
                     onStartTracking: {
                         shouldNavigateToAnalysis = true
-                        selectedExerciseForPreview = nil
+                        selectedPlanExerciseForPreview = nil
+                    },
+                    onRemove: {
+                        Task {
+                            await homeViewModel.removeExercise(at: planExercise.id)
+                            selectedPlanExerciseForPreview = nil
+                        }
+                    },
+                    onToggleComplete: {
+                        Task {
+                            await homeViewModel.toggleExerciseCompletion(
+                                planExerciseId: planExercise.id,
+                                completed: !planExercise.isCompleted
+                            )
+                            selectedPlanExerciseForPreview = nil
+                        }
                     }
                 )
                 .zIndex(999)
@@ -131,9 +150,11 @@ struct MainTabView: View {
                     onDismiss: {
                         showAddExercise = false
                     },
-                    onExerciseAdded: { exercise in
-                        // Add exercise through workoutService
-                        workoutService.addExercise(exercise)
+                    onExerciseAdded: { categorizedExercise in
+                        // Add exercise through homeViewModel
+                        Task {
+                            await homeViewModel.addExercise(categorizedExercise)
+                        }
                         showAddExercise = false
                     }
                 )
@@ -141,8 +162,9 @@ struct MainTabView: View {
                 .ignoresSafeArea()
                 .transition(.opacity)
             }
+            }
         }
-        .animation(.easeInOut(duration: 0.3), value: selectedExerciseForPreview != nil)
+        .animation(.easeInOut(duration: 0.3), value: selectedPlanExerciseForPreview != nil)
         .animation(.easeInOut(duration: 0.3), value: showAddExercise)
     }
 }

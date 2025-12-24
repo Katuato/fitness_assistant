@@ -7,13 +7,17 @@
 
 import Foundation
 
-struct WorkoutSession: Identifiable {
+struct WorkoutSession: Identifiable, Codable {
     let id = UUID()
     let date: Date
     let exerciseCount: Int
     let totalTime: Int
     let accuracy: Int
     let bodyPart: String
+
+    enum CodingKeys: String, CodingKey {
+        case date, exerciseCount, totalTime, accuracy, bodyPart
+    }
     
     var formattedDate: String {
         let calendar = Calendar.current

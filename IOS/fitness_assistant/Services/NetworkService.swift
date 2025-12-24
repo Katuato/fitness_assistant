@@ -86,7 +86,41 @@ class NetworkService {
     private lazy var decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        // Custom date decoding strategy to handle multiple date formats
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            
+            // Try different date formats
+            let formatters = [
+                // ISO8601 with microseconds: "2025-12-18T21:03:57.732371Z"
+                "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+                // ISO8601 with milliseconds: "2025-12-18T21:03:57.732Z"
+                "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+                // ISO8601 standard: "2025-12-18T21:03:57Z"
+                "yyyy-MM-dd'T'HH:mm:ssZ",
+                // Simple date: "2025-12-19"
+                "yyyy-MM-dd"
+            ]
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+            
+            for format in formatters {
+                dateFormatter.dateFormat = format
+                if let date = dateFormatter.date(from: dateString) {
+                    return date
+                }
+            }
+            
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Cannot decode date string: \(dateString)"
+            )
+        }
+        
         return decoder
     }()
     
@@ -239,5 +273,113 @@ class NetworkService {
         } catch {
             throw NetworkError.networkError(error)
         }
+    }
+}
+
+// MARK: - API Extensions
+
+extension NetworkService {
+
+    // MARK: - Workout Plans
+
+
+    func getTodaysPlan() async throws -> TodaysPlanResponse {
+        let endpoint = "/workout-plans/today"
+        return try await get(endpoint: endpoint)
+    }
+
+    func getExerciseCategories() async throws -> [IOSCategoryResponse] {
+        let endpoint = "/exercises/ios/categories"
+        return try await get(endpoint: endpoint, requiresAuth: false)
+    }
+
+    func getExercisesByCategory(categoryName: String) async throws -> [CategorizedExerciseResponse] {
+        let endpoint = "/exercises/ios/categories/\(categoryName)/exercises"
+        return try await get(endpoint: endpoint, requiresAuth: false)
+    }
+
+    func addExerciseToTodaysPlan(exerciseId: Int, sets: Int, reps: Int) async throws -> TodaysPlanResponse {
+        let endpoint = "/workout-plans/today/exercises"
+        let body = PlanExerciseCreateRequest(
+            exerciseId: exerciseId,
+            sets: sets,
+            reps: reps,
+            orderIndex: nil
+        )
+        return try await post(endpoint: endpoint, body: body)
+    }
+
+
+    func removeExerciseFromPlan(planExerciseId: Int) async throws -> TodaysPlanResponse {
+        let endpoint = "/workout-plans/exercises/\(planExerciseId)"
+        return try await delete(endpoint: endpoint)
+    }
+
+    func markExerciseCompleted(planExerciseId: Int, completed: Bool) async throws -> TodaysPlanResponse {
+        let endpoint = "/workout-plans/exercises/\(planExerciseId)/complete?completed=\(completed)"
+        return try await patch(endpoint: endpoint, body: EmptyBody())
+    }
+
+    func getPlanByDate(_ date: Date) async throws -> TodaysPlanResponse {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: date)
+        let endpoint = "/workout-plans/date/\(dateString)"
+        return try await get(endpoint: endpoint)
+    }
+
+    func getUserPlans() async throws -> [UserDailyPlanResponse] {
+        let endpoint = "/workout-plans"
+        return try await get(endpoint: endpoint)
+    }
+
+    func getWorkoutStats() async throws -> WorkoutStats {
+        let endpoint = "/stats/workout-stats"
+        return try await get(endpoint: endpoint)
+    }
+
+
+    func getWeeklyStats() async throws -> WeeklyStats {
+        let endpoint = "/stats/weekly-stats"
+        return try await get(endpoint: endpoint)
+    }
+
+
+    func getRecentSessions(limit: Int = 10) async throws -> [WorkoutSession] {
+        let endpoint = "/stats/recent-sessions?limit=\(limit)"
+        return try await get(endpoint: endpoint)
+    }
+
+    func getExerciseDetail(exerciseId: Int) async throws -> ExerciseDetailResponse {
+        let endpoint = "/exercises/\(exerciseId)"
+        return try await get(endpoint: endpoint, requiresAuth: false)
+    }
+}
+
+
+
+private struct EmptyBody: Codable {}
+
+
+
+extension NetworkService {
+    func get<T: Decodable>(endpoint: String, requiresAuth: Bool = true) async throws -> T {
+        return try await request(endpoint: endpoint, method: .get, requiresAuth: requiresAuth)
+    }
+
+    func post<T: Decodable>(endpoint: String, body: Encodable, requiresAuth: Bool = true) async throws -> T {
+        return try await request(endpoint: endpoint, method: .post, body: body, requiresAuth: requiresAuth)
+    }
+
+    func put<T: Decodable>(endpoint: String, body: Encodable, requiresAuth: Bool = true) async throws -> T {
+        return try await request(endpoint: endpoint, method: .put, body: body, requiresAuth: requiresAuth)
+    }
+
+    func patch<T: Decodable>(endpoint: String, body: Encodable, requiresAuth: Bool = true) async throws -> T {
+        return try await request(endpoint: endpoint, method: .patch, body: body, requiresAuth: requiresAuth)
+    }
+
+    func delete<T: Decodable>(endpoint: String, requiresAuth: Bool = true) async throws -> T {
+        return try await request(endpoint: endpoint, method: .delete, requiresAuth: requiresAuth)
     }
 }

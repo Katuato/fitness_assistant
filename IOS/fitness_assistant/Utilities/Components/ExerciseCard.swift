@@ -8,16 +8,37 @@
 import SwiftUI
 
 struct ExerciseCard: View {
-    let exercise: Exercise
+    let planExercise: TodaysPlanExercise
     let onPlayTapped: () -> Void
+    let onCompleteTapped: () -> Void
     let onCardTapped: () -> Void
-    
+
     @State private var isPressed = false
     @State private var isHovered = false
-    
-    init(exercise: Exercise, onPlayTapped: @escaping () -> Void = {}, onCardTapped: @escaping () -> Void = {}) {
-        self.exercise = exercise
+
+    init(planExercise: TodaysPlanExercise, onPlayTapped: @escaping () -> Void = {}, onCompleteTapped: @escaping () -> Void = {}, onCardTapped: @escaping () -> Void = {}) {
+        self.planExercise = planExercise
         self.onPlayTapped = onPlayTapped
+        self.onCompleteTapped = onCompleteTapped
+        self.onCardTapped = onCardTapped
+    }
+
+    // Для обратной совместимости
+    init(exercise: Exercise, onPlayTapped: @escaping () -> Void = {}, onCardTapped: @escaping () -> Void = {}, exerciseId: Int? = nil) {
+        self.planExercise = TodaysPlanExercise(
+            id: 0, // dummy id
+            exerciseId: exerciseId ?? 0, // dummy exerciseId
+            name: exercise.name,
+            sets: exercise.sets,
+            reps: exercise.reps,
+            isCompleted: exercise.isCompleted,
+            description: nil,
+            difficulty: nil,
+            targetMuscles: [],
+            imageUrl: nil
+        )
+        self.onPlayTapped = onPlayTapped
+        self.onCompleteTapped = {} // не используется для старого API
         self.onCardTapped = onCardTapped
     }
     
@@ -46,13 +67,17 @@ struct ExerciseCard: View {
                 // Play/Check Button
                 Button(action: {
                     withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
-                        onPlayTapped()
+                        if planExercise.isCompleted {
+                            onCompleteTapped() // Toggle completion for completed exercises
+                        } else {
+                            onPlayTapped() // Start exercise for incomplete exercises
+                        }
                     }
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
                             .fill(
-                                exercise.isCompleted
+                                planExercise.isCompleted
                                     ? Color.white.opacity(0.08)
                                     : accentGreen.opacity(0.2)
                             )
@@ -60,53 +85,86 @@ struct ExerciseCard: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .stroke(
-                                        exercise.isCompleted
+                                        planExercise.isCompleted
                                             ? Color.white.opacity(0.15)
                                             : accentGreen.opacity(0.4),
                                         lineWidth: 1.5
                                     )
                             )
-                        
-                        Image(systemName: exercise.isCompleted ? "checkmark" : "play.fill")
+
+                        Image(systemName: planExercise.isCompleted ? "checkmark" : "play.fill")
                             .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(exercise.isCompleted ? .white.opacity(0.6) : accentGreen)
-                            .scaleEffect(exercise.isCompleted ? 1.0 : 0.9)
+                            .foregroundColor(planExercise.isCompleted ? .white.opacity(0.6) : accentGreen)
+                            .scaleEffect(planExercise.isCompleted ? 1.0 : 0.9)
                     }
                 }
                 .buttonStyle(.plain)
                 
                 // Exercise Info
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(exercise.name)
+                    Text(planExercise.name)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.white)
                         .lineLimit(1)
-                    
+
                     HStack(spacing: 4) {
                         Image(systemName: "repeat")
                             .font(.system(size: 10, weight: .medium))
-                        
-                        Text("\(exercise.sets) sets • \(exercise.reps) reps")
+
+                        Text("\(planExercise.sets) sets • \(planExercise.reps) reps")
                             .font(.system(size: 12, weight: .medium))
                     }
                     .foregroundColor(.white.opacity(0.6))
+
+                    // Description
+                    if let description = planExercise.description, !description.isEmpty {
+                        Text(description)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundColor(.white.opacity(0.7))
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                    }
+
+                    // Target Muscles Tags
+                    if !planExercise.targetMuscles.isEmpty {
+                        HStack(spacing: 4) {
+                            ForEach(planExercise.targetMuscles.prefix(2), id: \.self) { muscle in
+                                Text(muscle)
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(brandOrange)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(brandOrange.opacity(0.1))
+                                    )
+                            }
+
+                            if planExercise.targetMuscles.count > 2 {
+                                Text("+\(planExercise.targetMuscles.count - 2)")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(.white.opacity(0.5))
+                            }
+                        }
+                        .padding(.top, 2)
+                    }
                 }
-                
+
                 Spacer()
-                
-                // Accuracy Display
-                if let accuracy = exercise.accuracy {
+
+                // Difficulty Display
+                if let difficulty = planExercise.difficulty {
                     VStack(spacing: 4) {
                         HStack(spacing: 4) {
-                            Image(systemName: "target")
+                            Image(systemName: "chart.bar.fill")
                                 .font(.system(size: 11, weight: .medium))
-                            
-                            Text("\(accuracy)%")
+
+                            Text(difficulty.prefix(3).uppercased())
                                 .font(.system(size: 14, weight: .bold))
                         }
                         .foregroundColor(brandOrange)
-                        
-                        Text("accuracy")
+
+                        Text("level")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.white.opacity(0.5))
                             .textCase(.uppercase)
@@ -116,8 +174,8 @@ struct ExerciseCard: View {
                         Text("—")
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(.white.opacity(0.4))
-                        
-                        Text("no data")
+
+                        Text("level")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.white.opacity(0.4))
                             .textCase(.uppercase)
@@ -158,35 +216,50 @@ struct ExerciseCard: View {
 #Preview {
     ZStack {
         Color.customBackground.ignoresSafeArea()
-        
+
         VStack(spacing: 16) {
             ExerciseCard(
-                exercise: Exercise(
+                planExercise: TodaysPlanExercise(
+                    id: 1,
+                    exerciseId: 4, // Squats
                     name: "Squats",
                     sets: 3,
                     reps: 12,
-                    accuracy: 94,
-                    isCompleted: false
+                    isCompleted: false,
+                    description: "A basic lower body exercise",
+                    difficulty: "intermediate",
+                    targetMuscles: ["Quadriceps", "Glutes"],
+                    imageUrl: nil
                 )
             )
-            
+
             ExerciseCard(
-                exercise: Exercise(
+                planExercise: TodaysPlanExercise(
+                    id: 2,
+                    exerciseId: 5, // Deadlifts
                     name: "Deadlifts",
                     sets: 4,
                     reps: 8,
-                    accuracy: 89,
-                    isCompleted: true
+                    isCompleted: true,
+                    description: "A compound full body exercise",
+                    difficulty: "advanced",
+                    targetMuscles: ["Back", "Legs"],
+                    imageUrl: nil
                 )
             )
-            
+
             ExerciseCard(
-                exercise: Exercise(
+                planExercise: TodaysPlanExercise(
+                    id: 3,
+                    exerciseId: 3, // Bench Press
                     name: "Bench Press",
                     sets: 4,
                     reps: 10,
-                    accuracy: nil,
-                    isCompleted: false
+                    isCompleted: false,
+                    description: "A chest exercise",
+                    difficulty: "intermediate",
+                    targetMuscles: ["Chest", "Triceps"],
+                    imageUrl: nil
                 )
             )
         }

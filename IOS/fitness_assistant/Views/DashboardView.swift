@@ -33,25 +33,12 @@ struct DashboardView: View {
         NavigationStack {
             ZStack {
                 AnimatedBackground()
-                
+
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 28) {
                         // Header Section
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("Track your progress")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(.white.opacity(0.55))
-                            
-                            Text("Performance Dashboard")
-                                .font(.system(size: 30, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 70)
-                        .padding(.horizontal, horizontalPadding)
-                        .opacity(headerAppear ? 1 : 0)
-                        .offset(y: headerAppear ? 0 : -20)
-                        
+                        headerSection
+
                         // Weekly Accuracy Chart
                         if let stats = viewModel.weeklyStats {
                             WeeklyAccuracyChart(
@@ -61,65 +48,43 @@ struct DashboardView: View {
                                 accentGreen: accentGreen
                             )
                             .padding(.horizontal, horizontalPadding)
-                            .opacity(chartAppear ? 1 : 0)
-                            .offset(y: chartAppear ? 0 : 20)
+                        } else if viewModel.isLoading {
+                            // Loading placeholder
+                            chartLoadingPlaceholder
+                                .padding(.horizontal, horizontalPadding)
                         }
                         
                         // Recent Training Sessions
                         if !viewModel.recentSessions.isEmpty {
-                            VStack(alignment: .leading, spacing: 16) {
-                                HStack {
-                                    Text("Recent Training")
-                                        .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(.white)
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        print("View all sessions tapped")
-                                    }) {
-                                        Text("View All")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(brandOrange)
-                                    }
-                                }
-                                
-                                ForEach(Array(viewModel.recentSessions.prefix(3).enumerated()), id: \.element.id) { index, session in
-                                    TrainingSessionCard(
-                                        session: session,
-                                        accentGreen: accentGreen,
-                                        brandOrange: brandOrange
-                                    )
-                                    .opacity(sessionsAppear ? 1 : 0)
-                                    .offset(x: sessionsAppear ? 0 : 50)
-                                    .animation(
-                                        .spring(response: 0.6, dampingFraction: 0.8)
-                                            .delay(Double(index) * 0.1),
-                                        value: sessionsAppear
-                                    )
-                                }
-                            }
-                            .padding(.horizontal, horizontalPadding)
+                            recentSessionsSection
+                        } else if !viewModel.isLoading {
+                            emptySessionsView
+                                .padding(.horizontal, horizontalPadding)
                         }
-                        
+
                         Spacer(minLength: 40)
                     }
                 }
-                
+                .refreshable {
+                    await viewModel.refreshData()
+                }
+
+                // Error overlay
+                if let error = viewModel.errorMessage {
+                    ErrorToast(message: error)
+                        .transition(.move(edge: .top))
+                }
+
+                // Loading overlay
                 if viewModel.isLoading {
-                    ZStack {
-                        Color.black.opacity(0.3)
-                            .ignoresSafeArea()
-                        
-                        ProgressView()
-                            .tint(.white)
-                            .scaleEffect(1.2)
-                    }
+                    LoadingOverlay()
                 }
             }
             .navigationBarHidden(true)
             .task {
                 await viewModel.loadData()
+            }
+            .onAppear {
                 startAnimations()
             }
         }
@@ -137,6 +102,88 @@ struct DashboardView: View {
         withAnimation(.easeOut(duration: 0.6).delay(0.3)) {
             sessionsAppear = true
         }
+    }
+    
+    // MARK: - Subviews
+
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Track your progress")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.white.opacity(0.55))
+
+            Text("Performance Dashboard")
+                .font(.system(size: 30, weight: .bold))
+                .foregroundColor(.white)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 70)
+        .padding(.horizontal, horizontalPadding)
+    }
+
+    private var recentSessionsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Recent Training")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                Button(action: {
+                    print("View all sessions tapped")
+                }) {
+                    Text("View All")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(brandOrange)
+                }
+            }
+
+            ForEach(Array(viewModel.recentSessions.prefix(3))) { session in
+                TrainingSessionCard(
+                    session: session,
+                    accentGreen: accentGreen,
+                    brandOrange: brandOrange
+                )
+            }
+        }
+        .padding(.horizontal, horizontalPadding)
+    }
+
+    private var chartLoadingPlaceholder: some View {
+        VStack(spacing: 18) {
+            HStack {
+                Rectangle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(width: 100, height: 20)
+                    .cornerRadius(4)
+                Spacer()
+            }
+
+            Rectangle()
+                .fill(Color.white.opacity(0.05))
+                .frame(height: 200)
+                .cornerRadius(20)
+        }
+        .shimmer()
+    }
+
+    private var emptySessionsView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "figure.walk")
+                .font(.system(size: 50))
+                .foregroundColor(.white.opacity(0.3))
+
+            Text("No workouts yet")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(.white.opacity(0.6))
+
+            Text("Complete your first workout to see it here")
+                .font(.system(size: 14))
+                .foregroundColor(.white.opacity(0.4))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 60)
     }
 }
 
@@ -356,6 +403,50 @@ struct TrainingSessionCard: View {
             withAnimation(.easeInOut(duration: 0.2)) {
                 isHovered = hovering
             }
+        }
+    }
+}
+
+// MARK: - Error Toast
+
+struct ErrorToast: View {
+    let message: String
+
+    var body: some View {
+        VStack {
+            HStack {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .foregroundColor(.white)
+
+                Text(message)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white)
+
+                Spacer()
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.red.opacity(0.9))
+            )
+            .padding()
+
+            Spacer()
+        }
+    }
+}
+
+// MARK: - Loading Overlay
+
+struct LoadingOverlay: View {
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.3)
+                .ignoresSafeArea()
+
+            ProgressView()
+                .tint(.white)
+                .scaleEffect(1.5)
         }
     }
 }

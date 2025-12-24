@@ -11,6 +11,9 @@ struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
     @State private var selectedExerciseForPreview: Exercise?
     @State private var showActiveResults = false
+    @EnvironmentObject var homeViewModel: HomeViewModel
+
+    var onExerciseCompleted: (() -> Void)?
     
     private var brandPurple: Color {
         Color(red: 0x73/255, green: 0x71/255, blue: 0xDF/255)
@@ -113,7 +116,32 @@ struct AnalysisView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    
+
+                    // Complete Exercise Button
+                    if homeViewModel.currentAnalyzingExerciseId != nil {
+                        Button(action: {
+                            Task {
+                                await homeViewModel.completeCurrentExercise()
+                                onExerciseCompleted?()
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("Complete Exercise")
+                                    .font(.system(size: 17, weight: .semibold))
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(accentGreen)
+                            )
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+                    }
+
                     Spacer(minLength: 40)
                 }
             }

@@ -7,17 +7,25 @@
 
 import Foundation
 
-struct DayAccuracy: Identifiable {
+struct DayAccuracy: Identifiable, Codable {
     let id = UUID()
     let day: String
     let accuracy: Double
+
+    enum CodingKeys: String, CodingKey {
+        case day, accuracy
+    }
 }
 
-struct WeeklyStats {
+struct WeeklyStats: Codable {
     let weekLabel: String
     let averageAccuracy: Double
     let dailyAccuracies: [DayAccuracy]
-    
+
+    enum CodingKeys: String, CodingKey {
+        case weekLabel, averageAccuracy, dailyAccuracies
+    }
+
     var formattedAccuracy: String {
         String(format: "%.1f%%", averageAccuracy)
     }
